@@ -46,7 +46,7 @@ if (isset($_POST['submit'])) {
     $sql = "INSERT INTO students (roll_no, name, total_fees, fees_paid, date) VALUES ('$roll_no', '$name', '$total_fees', '$fees_paid', '$date')";
     
     if ($conn->query($sql) === TRUE) {
-        echo "New record created successfully";
+        echo "<script>alert('New record created successfully');</script>";
     } else {
         echo "Error: " . $sql . "<br>" . $conn->error;
     }
@@ -58,7 +58,6 @@ if (isset($_POST['update'])) {
     $roll_no = $_POST['roll_no'];
     $name = $_POST['name'];
     $additional_fees = $_POST['additional_fees'];
-    $fees_paid = $_POST['fees_paid'];
     $date = $_POST['date'];
 
     // Fetch the existing fees paid
@@ -72,7 +71,7 @@ if (isset($_POST['update'])) {
     $sql = "UPDATE students SET roll_no='$roll_no', name='$name', fees_paid='$new_fees_paid', date='$date' WHERE id='$id'";
 
     if ($conn->query($sql) === TRUE) {
-        echo "Record updated successfully";
+        echo "<script>alert('Record updated successfully');</script>";
     } else {
         echo "Error updating record: " . $conn->error;
     }
@@ -88,22 +87,7 @@ if (isset($_GET['delete'])) {
     $sql = "DELETE FROM students WHERE id='$id'";
 
     if ($conn->query($sql) === TRUE) {
-        echo "Record deleted successfully";
-    } else {
-        echo "Error deleting record: " . $conn->error;
-    }
-
-    header("Location: " . $_SERVER['PHP_SELF']);
-    exit;
-}
-
-if (isset($_GET['delete'])) {
-    $id = $_GET['delete'];
-
-    $sql = "DELETE FROM students WHERE id='$id'";
-
-    if ($conn->query($sql) === TRUE) {
-        echo "Record deleted successfully";
+        echo "<script>alert('Record deleted successfully');</script>";
     } else {
         echo "Error deleting record: " . $conn->error;
     }
@@ -135,9 +119,10 @@ if (isset($_POST['search'])) {
             $search_result[] = $row;
         }
     } else {
-        echo "No records found with Roll Number: " . $search_roll_no;
+        echo "<script>alert('No records found with Roll Number: $search_roll_no');</script>";
     }
 }
+
 if (isset($_POST['download'])) {
     header('Content-Type: text/csv');
     header('Content-Disposition: attachment; filename="student_records.csv"');
@@ -153,44 +138,114 @@ if (isset($_POST['download'])) {
 ?>
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    
-    <title>Student Fee Management</title>   
+    <meta charset="UTF-8">
+    <title>Student Fee Management</title>
     <style>
-          body {
-            font-family: Arial, sans-serif;
+         body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f7f7f7;
             margin: 0;
             padding: 0;
-            background-color: #f4f4f4;
+            color: #333;
+        }
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 20px 0;
+            text-align: left;
+            display: flex;
+            align-items: left;
+            justify-content: center;
         }
         .container {
             width: 80%;
-            margin: auto;
-            overflow: hidden;
+            margin: 20px auto;
+            background: #fff;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
-        header {
-            background: #50b3a2;
-            color: #ffffff;
-            padding-top: 30px;
-            min-height: 70px;
-            border-bottom: #e8491d 3px solid;
+        .banner {
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            justify-content: left;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
         }
-        header a {
-            color: #ffffff;
-            text-decoration: none;
-            text-transform: uppercase;
+        .banner img {
+            height: 50px;
+            margin-right: 20px;
+        }
+        .banner h1 {
+            font-size: 24px;
+            color: white;
+            margin: 0;
+        }
+        .form-style {
+            background: #f9f9f9;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        .form-style input[type="text"],
+        .form-style input[type="number"],
+        .form-style input[type="date"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            box-sizing: border-box;
+        }
+        .form-style input[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            padding: 14px 20px;
+            border: none;
+            cursor: pointer;
+            width: 100%;
             font-size: 16px;
         }
+        .form-style input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+        .table-container {
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        .actions a {
+            text-decoration: none;
+            color: #4CAF50;
+            margin-right: 10px;
+        }
+        .actions a:hover {
+            color: #e8491d;
+        }
         .header-buttons {
-            display: inline-block;
-            margin-left: 20px;
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
         }
         .header-buttons button {
-            background-color: #50b3a2;
+            background-color: #4CAF50;
             color: white;
             padding: 10px 20px;
             border: none;
@@ -202,83 +257,12 @@ if (isset($_POST['download'])) {
         .header-buttons button:hover {
             background-color: #45a049;
         }
-        header ul {
-            padding: 0;
-            list-style: none;
-        }
-        header li {
-            float: left;
-            display: inline;
-            padding: 0 20px 0 20px;
-        }
-        .form-style {
-            background: #ffffff;
-            padding: 20px;
-            margin: 30px 0;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        .form-style input[type="text"],
-        .form-style input[type="number"],
-        .form-style input[type="date"] {
-            width: 100%;
-            padding: 10px;
-            margin: 5px 0 20px 0;
-            display: inline-block;
-            border: 1px solid #ccc;
-            box-sizing: border-box;
-        }
-        .form-style input[type="submit"] {
-            background-color: #50b3a2;
-            color: white;
-            padding: 14px 20px;
-            margin: 8px 0;
-            border: none;
-            cursor: pointer;
-            width: 100%;
-        }
-        .form-style input[type="submit"]:hover {
-            background-color: #45a049;
-        }
-        table {
-            width: 100%;
-            margin-top: 20px;
-            border-collapse: collapse;
-        }
-        table, th, td {
-            border: 1px solid #ddd;
-        }
-        th, td {
-            padding: 12px;
-            text-align: left;
-        }
-        th {
-            background-color: #50b3a2;
-            color: white;
-        }
-        tr:nth-child(even) {
-            background-color: #f2f2f2;
-        }
-        .actions a {
-            text-decoration: none;
-            color: #50b3a2;
-        }
-        .actions a:hover {
-            color: #e8491d;
-        }
-        /* .menu-button {
-            background-color: #50b3a2;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            cursor: pointer;
-            font-size: 16px;
-            margin: 20px 0;
-        }
-        .menu-button:hover {
-            background-color: #45a049;
-        } */
         #searchForm {
             display: none;
+        }
+        .logo {
+            max-height: 60px;
+            margin-right: 15px;
         }
     </style>
     <script>
@@ -294,143 +278,82 @@ if (isset($_POST['download'])) {
 </head>
 <body>
     <header>
-        <h1>CLERK'S EDUCATION POINT </h1> <br>
-         <h2 >Student Fee Management</h2>
-    <div  class="header-buttons" >
-            <button onclick="toggleSearchForm()">Search</button>
-            <form action="" method="post" style="display: inline;">
-                <button type="submit" name="download">Download Report</button>
-            </form>
+        <?php
+        $logoPath = 'path/to/your/logo.png'; // Replace with the actual path to your logo image
+        ?>
+        <div class="banner">
+            <h1>CLERK'S EDUCATION POINT </h1>   
+            <img src="<?php echo $logoPath; ?>" alt="Logo" class="logo">
+            <h1>Student Fee Management</h1>
         </div>
-        </header>
-    
-
+    </header>
+    <div class="header-buttons">
+        <button onclick="document.getElementById('addStudentForm').scrollIntoView();">Add Student</button>
+        <button onclick="toggleSearchForm()">Search Student</button>
+        <form method="post" style="display:inline-block;">
+            <input type="hidden" name="download" value="true">
+            <button type="submit">Download CSV</button>
+        </form>
+    </div>
     <div class="container">
-        <div class="form-style">
-            <h2>Add New Student Record</h2>
-            <form action="" method="post">
-                <label for="roll_no">Roll Number:</label>
-                <input type="text" id="roll_no" name="roll_no" required><br><br>
-
-                <label for="name">Student Name:</label>
-                <input type="text" id="name" name="name" required><br><br>
-
-                <label for="total_fees">Total Fees:</label>
-                <input type="number" step="0.01" id="total_fees" name="total_fees" required><br><br>
-
-                <label for="fees_paid">Fees Paid:</label>
-                <input type="number" step="0.01" id="fees_paid" name="fees_paid" required><br><br>
-
-                <label for="date">Date:</label>
-                <input type="date" id="date" name="date" required><br><br>
-
-                <input type="submit" name="submit" value="Submit">
+        <div id="addStudentForm" class="form-style">
+            <h2>Add Student Record</h2>
+            <form method="post" action="">
+                <label for="roll_no">Roll Number</label>
+                <input type="text" id="roll_no" name="roll_no" required>
+                <label for="name">Name</label>
+                <input type="text" id="name" name="name" required>
+                <label for="total_fees">Total Fees</label>
+                <input type="number" id="total_fees" name="total_fees" step="0.01" required>
+                <label for="fees_paid">Fees Paid</label>
+                <input type="number" id="fees_paid" name="fees_paid" step="0.01" required>
+                <label for="date">Date</label>
+                <input type="date" id="date" name="date" required>
+                <input type="submit" name="submit" value="Add Student">
             </form>
         </div>
-
-        
         <div id="searchForm" class="form-style">
-            <h2>Search Student Record by Roll Number</h2>
-            <form action="" method="post">
-                <label for="search_roll_no">Roll Number:</label>
-                <input type="text" id="search_roll_no" name="search_roll_no" required><br><br>
-                
+            <h2>Search Student Record</h2>
+            <form method="post" action="">
+                <label for="search_roll_no">Roll Number</label>
+                <input type="text" id="search_roll_no" name="search_roll_no" required>
                 <input type="submit" name="search" value="Search">
             </form>
         </div>
-
-        <?php if (isset($_POST['search'])): ?>
-        <h2>Search Results</h2>
-        <table>
-            <tr>
-                <th>ID</th>
-                <th>Roll Number</th>
-                <th>Name</th>
-                <th>Total Fees</th>
-                <th>Fees Paid</th>
-                <th>Remaining Fees</th>
-                <th>Date</th>
-                <th>Actions</th>
-            </tr>
-            <?php foreach ($search_result as $student): ?>
-            <tr>
-                <td><?php echo $student['id']; ?></td>
-                <td><?php echo $student['roll_no']; ?></td>
-                <td><?php echo $student['name']; ?></td>
-                <td><?php echo $student['total_fees']; ?></td>
-                <td><?php echo $student['fees_paid']; ?></td>
-                <td><?php echo $student['remaining_fees']; ?></td>
-                <td><?php echo $student['date']; ?></td>
-                <td class="actions">
-                    <a href="?edit=<?php echo $student['id']; ?>">Edit</a> |
-                    <a href="?delete=<?php echo $student['id']; ?>" onclick="return confirm('Are you sure?')">Delete</a>
-                </td>
-            </tr>
-            <?php endforeach; ?>
-        </table>
-        <?php endif; ?>
-
-        <h2>Student Records</h2>
-        <table>
-            <tr>
-                <th>ID</th>
-                <th>Roll Number</th>
-                <th>Name</th>
-                <th>Total Fees</th>
-                <th>Fees Paid</th>
-                <th>Remaining Fees</th>
-                <th>Date</th>
-                <th>Actions</th>
-            </tr>
-            <?php foreach ($students as $student): ?>
-            <tr>
-                <td><?php echo $student['id']; ?></td>
-                <td><?php echo $student['roll_no']; ?></td>
-                <td><?php echo $student['name']; ?></td>
-                <td><?php echo $student['total_fees']; ?></td>
-                <td><?php echo $student['fees_paid']; ?></td>
-                <td><?php echo $student['remaining_fees']; ?></td>
-                <td><?php echo $student['date']; ?></td>
-                <td class="actions">
-                    <a href="?edit=<?php echo $student['id']; ?>">Edit</a> |
-                    <a href="?delete=<?php echo $student['id']; ?>" onclick="return confirm('Are you sure?')">Delete</a>
-                </td>
-            </tr>
-            <?php endforeach; ?>
-        </table>
-
-        <?php if (isset($_GET['edit'])): ?>
-        <?php
-        $id = $_GET['edit'];
-        $result = $conn->query("SELECT * FROM students WHERE id='$id'");
-        $student = $result->fetch_assoc();
-        ?>
-        <div class="form-style">
-            <h2>Edit Student Record</h2>
-            <form action="" method="post">
-                <input type="hidden" name="id" value="<?php echo $student['id']; ?>">
-                
-                <label for="roll_no">Roll Number:</label>
-                <input type="text" id="roll_no" name="roll_no" value="<?php echo $student['roll_no']; ?>" required><br><br>
-
-                <label for="name">Student Name:</label>
-                <input type="text" id="name" name="name" value="<?php echo $student['name']; ?>" required><br><br>
-                
-                <label for="additional_fees">Additional Fees:</label>
-                <input type="number" step="0.01" id="additional_fees" name="additional_fees" required><br><br>
-                
-                <label for="fees_paid">Fees Paid:</label>
-                <input type="number" step="0.01" id="fees_paid" name="fees_paid" value="<?php echo $student['fees_paid']; ?>" required><br><br>
-
-                <label for="date">Date:</label>
-                <input type="date" id="date" name="date" value="<?php echo $student['date']; ?>" required><br><br>
-                
-                <input type="submit" name="update" value="Update">
-            </form>
+        <div class="table-container">
+            <h2>Student Records</h2>
+            <table>
+                <tr>
+                    <th>ID</th>
+                    <th>Roll Number</th>
+                    <th>Name</th>
+                    <th>Total Fees</th>
+                    <th>Fees Paid</th>
+                    <th>Remaining Fees</th>
+                    <th>Date</th>
+                    <th>Actions</th>
+                </tr>
+                <?php foreach ($students as $student): ?>
+                    <tr>
+                        <td><?php echo $student['id']; ?></td>
+                        <td><?php echo $student['roll_no']; ?></td>
+                        <td><?php echo $student['name']; ?></td>
+                        <td><?php echo $student['total_fees']; ?></td>
+                        <td><?php echo $student['fees_paid']; ?></td>
+                        <td><?php echo $student['remaining_fees']; ?></td>
+                        <td><?php echo $student['date']; ?></td>
+                        <td class="actions">
+                            <a href="?edit=<?php echo $student['id']; ?>">Edit</a> | 
+                            <a href="?delete=<?php echo $student['id']; ?>" onclick="return confirm('Are you sure you want to delete this record?');">Delete</a>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            </table>
         </div>
-        <?php endif; ?>
     </div>
 </body>
 </html>
 
-<?php $conn->close(); ?>
+<?php
+$conn->close();
+?>
