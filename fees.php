@@ -116,12 +116,17 @@ if (isset($_POST['search'])) {
 
     if ($result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
+            $row['date'] = date('d-m-Y', strtotime($row['date'])); // Convert date format for display
+            $search_result[] = $row;
+        }
+    } else {
+
             $search_result[] = $row;
         }
     } else {
         echo "<script>alert('No records found with Roll Number: $search_roll_no');</script>";
     }
-}
+
 
 if (isset($_POST['download'])) {
     header('Content-Type: text/csv');
@@ -274,12 +279,15 @@ if (isset($_POST['download'])) {
                 searchForm.style.display = 'none';
             }
         }
+        function clearForm() {
+            document.getElementById('addStudentForm').reset();
+        }
     </script>
 </head>
 <body>
     <header>
         <?php
-        $logoPath = 'path/to/your/logo.png'; // Replace with the actual path to your logo image
+        $logoPath = '"C:\Users\Admin\OneDrive\Pictures\project\cep_logo.jpg"'; 
         ?>
         <div class="banner">
             <h1>CLERK'S EDUCATION POINT </h1>   
