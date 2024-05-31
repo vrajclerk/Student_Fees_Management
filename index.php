@@ -124,7 +124,7 @@ if (isset($_POST['search'])) {
             $search_result[] = $row;
         }
     } else {
-        echo "<script>alert('No records found with Roll Number: $search_roll_no');</script>";
+        echo "<script>alert('No records found with Roll Number: $roll_no');</script>";
     }
 
 
@@ -147,129 +147,7 @@ if (isset($_POST['download'])) {
 <head>
     <meta charset="UTF-8">
     <title>Student Fee Management</title>
-    <style>
-         body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f7f7f7;
-            margin: 0;
-            padding: 0;
-            color: #333;
-        }
-        header {
-            background-color: #4CAF50;
-            color: white;
-            padding: 20px 0;
-            text-align: left;
-            display: flex;
-            align-items: left;
-            justify-content: center;
-        }
-        .container {
-            width: 80%;
-            margin: 20px auto;
-            background: #fff;
-            padding: 20px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-        .banner {
-            display: flex;
-            align-items: center;
-            justify-content: left;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-        }
-        .banner img {
-            height: 50px;
-            margin-right: 20px;
-        }
-        .banner h1 {
-            font-size: 24px;
-            color: white;
-            margin: 0;
-        }
-        .form-style {
-            background: #f9f9f9;
-            padding: 20px;
-            margin-bottom: 30px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-        }
-        .form-style input[type="text"],
-        .form-style input[type="number"],
-        .form-style input[type="date"] {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            border: 1px solid #ddd;
-            box-sizing: border-box;
-        }
-        .form-style input[type="submit"] {
-            background-color: #4CAF50;
-            color: white;
-            padding: 14px 20px;
-            border: none;
-            cursor: pointer;
-            width: 100%;
-            font-size: 16px;
-        }
-        .form-style input[type="submit"]:hover {
-            background-color: #45a049;
-        }
-        .table-container {
-            overflow-x: auto;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 30px;
-        }
-        table, th, td {
-            border: 1px solid #ddd;
-        }
-        th, td {
-            padding: 12px;
-            text-align: left;
-        }
-        th {
-            background-color: #4CAF50;
-            color: white;
-        }
-        tr:nth-child(even) {
-            background-color: #f2f2f2;
-        }
-        .actions a {
-            text-decoration: none;
-            color: #4CAF50;
-            margin-right: 10px;
-        }
-        .actions a:hover {
-            color: #e8491d;
-        }
-        .header-buttons {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 20px;
-        }
-        .header-buttons button {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            cursor: pointer;
-            font-size: 16px;
-            margin: 0 10px;
-            transition: background-color 0.3s ease;
-        }
-        .header-buttons button:hover {
-            background-color: #45a049;
-        }
-        #searchForm {
-            display: none;
-        }
-        .logo {
-            max-height: 60px;
-            margin-right: 15px;
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" href="style.css">
     <script>
         function toggleSearchForm() {
             var searchForm = document.getElementById('searchForm');
@@ -287,7 +165,7 @@ if (isset($_POST['download'])) {
 <body>
     <header>
         <?php
-        $logoPath = '"C:\Users\Admin\OneDrive\Pictures\project\cep_logo.jpg"'; 
+        $logoPath = 'images/file.png'; 
         ?>
         <div class="banner">
             <h1>CLERK'S EDUCATION POINT </h1>   
