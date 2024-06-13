@@ -7,6 +7,7 @@
             <h2 class="mb-0">Add Student Record</h2>
         </div>
         <div class="card-body">
+            
             <form method="post" action="{{ route('students.store') }}">
                 @csrf
                 <div class="form-group mb-3">
