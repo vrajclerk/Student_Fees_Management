@@ -14,9 +14,9 @@ class Student extends Model
     protected $fillable = [
         'roll_no', 'name', 'total_fees', 'fees_paid', 'date'
     ];
-    protected $dates = ['date'];
+    // protected $dates = ['date'];
     
-    public function getDateAttribute($value){
-        $this->attributes['date'] = strtotime($value);
-    }
+    // public function getDateAttribute($value){
+    //     $this->attributes['date'] = strtotime($value);
+    // }
 }

@@ -96,11 +96,14 @@ class StudentController extends Controller
         $roll_no = $request->input('search_roll_no');
         $student = Student::where('roll_no', $roll_no)->get();
 
+        $name = $request->input('search_roll_no');
+        $student = Student::where('name', $name)->get();
+
         if ($student->isEmpty()) {
             return redirect()->route('students.index')->with('error', 'No records found with Roll Number: ' . $roll_no);
         }
 
-        return view('students.index', compact('students'));
+        return view('students.index', compact('student'));
     }
 
     public function download()
@@ -149,6 +152,6 @@ class StudentController extends Controller
     {
         $student = Student::withTrashed()->findOrFail($id);
         $student->forceDelete();
-        return redirect()->route('students.trash')->with('success', 'Student permanently deleted');
+        return redirect()->route('students.index')->with('success', 'Student permanently deleted');
     }
 }

@@ -17,9 +17,9 @@
             {{-- <li class="nav-item">
                 <button class="btn nav-link" onclick="toggleSearchForm()">Search Student</button>
             </li> --}}
-            <li class="nav-item">
+            {{-- <li class="nav-item">
                 <button class="btn nav-link" onclick="toggleSearchForm()">Search Student</button>
-            </li>
+            </li> --}}
             <li class="nav-item">
                 <form method="post" action="{{ route('students.download') }}" style="display:inline-block;">
                     @csrf
