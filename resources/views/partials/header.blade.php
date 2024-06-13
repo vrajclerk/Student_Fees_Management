@@ -26,6 +26,12 @@
                     <button type="submit" class="btn nav-link">Download CSV</button>
                 </form>
             </li>
+            <li class="nav-item">
+                <form method="post" action="{{ route('students.marks.download') }}" style="display:inline-block;">
+                    @csrf
+                    <button type="submit" class="btn nav-link">Download Marks</button>
+                </form>
+            </li>
         </ul>
     </div>
 </nav>

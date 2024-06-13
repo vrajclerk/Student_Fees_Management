@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\StudentController;
+use App\Http\Controllers\MarkController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -28,4 +29,17 @@ Route::get('/students/trash', [StudentController::class, 'trash'])->name('studen
 
 Route::get('/students/restore/{id}',[StudentController::class,'restore'])->name('student.restore');
 Route::get('/students/force-delete/{id}',[StudentController::class,'forceDelete'])->name('students.force-delete');
+
+Route::prefix('students/{student}')->group(function () {
+    Route::get('marks', [MarkController::class, 'index'])->name('students.marks.index');
+    Route::get('marks/create', [MarkController::class, 'create'])->name('students.marks.create');
+    Route::post('marks', [MarkController::class, 'store'])->name('students.marks.store');
+    Route::get('marks/{mark}/edit', [MarkController::class, 'edit'])->name('students.marks.edit');
+    Route::put('marks/{mark}', [MarkController::class, 'update'])->name('students.marks.update');
+    Route::delete('marks/{mark}', [MarkController::class, 'destroy'])->name('students.marks.destroy');
+    
+});
+
+Route::post('marks/download', [MarkController::class, 'download'])->name('students.marks.download');
+
 

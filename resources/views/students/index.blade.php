@@ -50,13 +50,17 @@
                 {{-- <td>{{$student->date}}</td> --}}
                 <td class="actions">
                     <a href="{{ route('students.edit', ['id' => $student->id]) }}">
-                        <button class="btn btn-primary">Edit</button>
+                        <button class="btn btn-primary d-inline-block m-2">Edit</button>
                     </a> | 
                     <a href="{{ route('students.force-delete', ['id' => $student->id]) }}">
-                        <button type="button" class="btn-danger" onclick="return confirm('Are you sure you want to move this record to trash?');">delete</button>
+                        <button type="button" class="btn-danger d-inline-block m-2" onclick="return confirm('Are you sure you want to move this record to trash?');">Delete</button>
+                    </a>  |
+                    <a href="{{ route('students.marks.index', $student->id) }}" >
+                        <button class="btn btn-info d-inline-block m-2">View Marks</button>
                     </a>
                 </td>
             </tr>
+           
         @endforeach
         </tbody>
     </table>

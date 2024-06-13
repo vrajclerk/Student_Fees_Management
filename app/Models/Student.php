@@ -19,4 +19,10 @@ class Student extends Model
     // public function getDateAttribute($value){
     //     $this->attributes['date'] = strtotime($value);
     // }
+
+    public function marks()
+{
+    return $this->hasMany(Mark::class);
+}
+
 }
