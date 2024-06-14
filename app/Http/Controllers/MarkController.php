@@ -26,24 +26,32 @@ class MarkController extends Controller
 
     public function create(Student $student)
     {
-        $subjects = $this->subjects;
+        $subjects = ['Account', 'Economics', 'Statastics','B.A.', 'English','Gujarati','Computer'];
         return view('marks.create', compact('student', 'subjects'));
     }
 
     public function store(Request $request, Student $student)
     {
         $request->validate([
-            'subject' => 'required|string',
-            'exam_type' => 'required|in:monthly,mid-term,final',
-            'marks' => 'required|integer',
+            'marks.*.subject' => 'required|string',
+            'marks.*.monthly_marks' => 'nullable|integer',
+            'marks.*.mid_term_marks' => 'nullable|integer',
+            'marks.*.final_marks' => 'nullable|integer',
         ]);
 
-        $mark = new Mark($request->all());
-        $mark->student_id = $student->id;
-        $mark->save();
+        foreach ($request->marks as $markData) {
+            $mark = new Mark([
+                'subject' => $markData['subject'],
+                'monthly_marks' => $markData['monthly_marks'],
+                'mid_term_marks' => $markData['mid_term_marks'],
+                'final_marks' => $markData['final_marks'],
+            ]);
+            $student->marks()->save($mark);
+        }
 
-        return redirect()->route('students.marks.index', $student)->with('success', 'Marks added successfully.');
+        return redirect()->route('students.marks.index', $student->id)->with('success', 'Marks added successfully.');
     }
+
 
     public function edit(Student $student, Mark $mark)
     {
@@ -55,8 +63,10 @@ class MarkController extends Controller
     {
         $request->validate([
             'subject' => 'required|string',
-            'exam_type' => 'required|in:monthly,mid-term,final',
-            'marks' => 'required|integer',
+            'marks.*.id' => 'required|integer|exists:marks,id',
+            'marks.*.monthly_marks' => 'nullable|integer',
+            'marks.*.mid_term_marks' => 'nullable|integer',
+            'marks.*.final_marks' => 'nullable|integer',
         ]);
 
         $mark->update($request->all());
@@ -76,7 +86,7 @@ class MarkController extends Controller
 
         $filename = "student_marks.csv";
         $handle = fopen($filename, 'w+');
-        fputcsv($handle, ['ID', 'Roll Number', 'Name','subject','exam_type','marks' ]);
+        fputcsv($handle, ['ID', 'Roll Number', 'Name','subject','monthly_marks','mid_term_marks','final_marks', ]);
 
         foreach ($mark as $mark) {
             fputcsv($handle, [
@@ -84,8 +94,9 @@ class MarkController extends Controller
                 $mark->roll_no,
                 $mark->name,
                 $mark->subject,
-                $mark->exam_type,
-                $mark->marks
+                $mark->monthly_marks,
+                $mark->mid_term_marks,
+                $mark->final_marks  
                 
             ]);
         }

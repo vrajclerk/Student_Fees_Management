@@ -6,27 +6,37 @@
 
     <form action="{{ route('students.marks.store', $student->id) }}" method="post">
         @csrf
-        <div class="form-group">
-            <label for="subject">Subject</label>
-            <select name="subject" id="subject" class="form-control" required>
-                <option value="">Select Subject</option>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Roll No</th>
+                    <th>Name</th>
+                    <th>Subject</th>
+                    <th>Monthly Marks</th>
+                    <th>Mid-Term Marks</th>
+                    <th>Final Marks</th>
+                </tr>
+            </thead>
+            <tbody>
                 @foreach ($subjects as $subject)
-                    <option value="{{ $subject }}">{{ $subject }}</option>
+                <tr>
+                    <td>{{ $student->roll_no }}</td>
+                    <td>{{ $student->name}}</td>
+                    <td>{{ $subject }}</td>
+                    <td>
+                        <input type="hidden" name="marks[{{ $loop->index }}][subject]" value="{{ $subject }}">
+                        <input type="number" name="marks[{{ $loop->index }}][monthly_marks]" class="form-control">
+                    </td>
+                    <td>
+                        <input type="number" name="marks[{{ $loop->index }}][mid_term_marks]" class="form-control">
+                    </td>
+                    <td>
+                        <input type="number" name="marks[{{ $loop->index }}][final_marks]" class="form-control">
+                    </td>
+                </tr>
                 @endforeach
-            </select>
-        </div>
-        <div class="form-group">
-            <label for="exam_type">Exam Type</label>
-            <select name="exam_type" id="exam_type" class="form-control" required>
-                <option value="monthly">Monthly</option>
-                <option value="mid-term">Mid-Term</option>
-                <option value="final">Final</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label for="marks">Marks</label>
-            <input type="number" name="marks" id="marks" class="form-control" required>
-        </div>
+            </tbody>
+        </table>
         <button type="submit" class="btn btn-primary">Add Marks</button>
     </form>
 </div>

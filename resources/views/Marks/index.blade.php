@@ -12,8 +12,10 @@
                 <th>Roll Number</th>
                 <th>Name</th>
                 <th>Subject</th>
-                <th>Exam Type</th>
-                <th>Marks</th>
+                <th>Monthly Marks</th>
+                <th>Mid-Term Marks</th>
+                <th>Final Marks</th>
+                {{-- <th>Marks</th> --}}
                 <th>Actions</th>
             </tr>
         </thead>
@@ -21,16 +23,19 @@
 
             {{-- @foreach ($student as student) --}}
             <tr>
-                <td>{{ $student->roll_no }}</td>
+                {{-- <td>{{ $student->roll_no }}</td>
                 <td>{{ $student->name}}</td>
-                
+                 --}}
             {{-- @endforeach --}}
            
             @foreach ($marks as $mark)
-                
+            <td>{{ $student->roll_no }}</td>
+            <td>{{ $student->name}}</td>
                     <td>{{ $mark->subject }}</td>
-                    <td>{{ $mark->exam_type }}</td>
-                    <td>{{ $mark->marks }}</td>
+                    <td>{{ $mark->monthly_marks }}</td>
+                    <td>{{ $mark->mid_term_marks}}</td>
+                    <td>{{ $mark->final_marks }}</td>
+                    {{-- <td>{{ $mark->marks }}</td> --}}
                     <td>
                         <a href="{{ route('students.marks.edit', [$student->id, $mark->id]) }}" class="btn btn-primary">Edit</a>
                         <form action="{{ route('students.marks.destroy', [$student->id, $mark->id]) }}" method="post" style="display:inline;">

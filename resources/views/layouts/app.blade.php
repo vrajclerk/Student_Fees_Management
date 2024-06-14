@@ -4,6 +4,7 @@
     {{-- <link rel="icon" href="asset('images/cep_logo.jpg')" /> --}}
     {{-- <img src="{{ asset('images/cep_logo.jpg') }}"  style="height: 40px; width: auto;"> --}}
     <title>CEP</title>
+    <link rel="icon" type="image/x-icon" href="public/images/favicon.ico">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
    
 </head>

@@ -2,41 +2,43 @@
 
 @section('content')
 <div class="container">
-    <h2>Edit Marks</h2>
+    <h2>Edit Marks for {{ $student->name }}</h2>
 
     <form action="{{ route('students.marks.update', [$student->id, $mark->id]) }}" method="post">
         @csrf
         @method('PUT')
-        <div class="form-group">
-            <label for="roll_no">Roll Number</label>
-        <input type="text" id="roll_no" name="roll_no" value="{{ $student->roll_no }}" required>
-        
-        
-        <label for="name">Name</label>
-        <input type="text" id="name" name="name" value="{{ $student->name }}" required>
-       
-            <label for="subject">Subject</label>
-            <select name="subject" id="subject" class="form-control" required>
-                <option value="">Select Subject</option>
-                @foreach ($subjects as $subject)
-                    <option value="{{ $subject }}" {{ $subject == $mark->subject ? 'selected' : '' }}>
-                        {{ $subject }}
-                    </option>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Roll Number</th>
+                    <th>Name</th>
+                    <th>Subject</th>
+                    <th>Monthly Marks</th>
+                    <th>Mid-Term Marks</th>
+                    <th>Final Marks</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{ $student->roll_no }}</td>
+                    <td>{{ $student->name}}</td>
+                @foreach ($mark as $mark)
+                <tr>
+                    <td>{{ $mark->subjects }}</td>
+                    <td>
+                        <input type="hidden" name="marks[{{ $loop->index }}][id]" value="{{ $mark->id }}">
+                        <input type="number" name="marks[{{ $loop->index }}][monthly_marks]" class="form-control" value="{{ $mark->monthly_marks }}">
+                    </td>
+                    <td>
+                        <input type="number" name="marks[{{ $loop->index }}][mid_term_marks]" class="form-control" value="{{ $mark->mid_term_marks }}">
+                    </td>
+                    <td>
+                        <input type="number" name="marks[{{ $loop->index }}][final_marks]" class="form-control" value="{{ $mark->final_marks }}">
+                    </td>
+                </tr>
                 @endforeach
-            </select>
-        </div>
-        <div class="form-group">
-            <label for="exam_type">Exam Type</label>
-            <select name="exam_type" id="exam_type" class="form-control" required>
-                <option value="monthly" {{ $mark->exam_type == 'monthly' ? 'selected' : '' }}>Monthly</option>
-                <option value="mid-term" {{ $mark->exam_type == 'mid-term' ? 'selected' : '' }}>Mid-Term</option>
-                <option value="final" {{ $mark->exam_type == 'final' ? 'selected' : '' }}>Final</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label for="marks">Marks</label>
-            <input type="number" name="marks" id="marks" class="form-control" value="{{ $mark->marks }}" required>
-        </div>
+            </tbody>
+        </table>
         <button type="submit" class="btn btn-primary">Update Marks</button>
     </form>
 </div>

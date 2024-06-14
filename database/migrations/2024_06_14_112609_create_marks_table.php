@@ -16,10 +16,11 @@ class CreateMarksTable extends Migration
         Schema::create('marks', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('student_id');
-            $table->unsignedBigInteger('roll_no');
-            $table->string('name');
+            
             $table->string('subject');
-            $table->enum('exam_type', ['monthly', 'mid-term', 'final']);
+            $table->integer('monthly_marks')->nullable();
+            $table->integer('mid_term_marks')->nullable();
+            $table->integer('final_marks')->nullable();
             $table->integer('marks');
             $table->timestamps();
 
