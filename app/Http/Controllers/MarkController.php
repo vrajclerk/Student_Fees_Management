@@ -5,18 +5,19 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Student;
 use App\Models\Mark;
+use PDF;
 
 class MarkController extends Controller
 {
-    private $subjects = [
-        'Account',
-        'Economics',
-        'Statastics',
-        'B.A.',
-        'English',
-        'Gujarati',
-        'Computer'
-    ];
+    // private $subjects = [
+    //     'Account',
+    //     'Economics',
+    //     'Statastics',
+    //     'B.A.',
+    //     'English',
+    //     'Gujarati',
+    //     'Computer'
+    // ];
 
     public function index(Student $student)
     {
@@ -53,26 +54,34 @@ class MarkController extends Controller
     }
 
 
-    public function edit(Student $student, Mark $mark)
+    public function edit(Student $student)
     {
-        $subjects = $this->subjects;
-        return view('marks.edit', compact('student', 'mark', 'subjects'));
+        $mark = $student->marks; // Retrieve all marks associated with the student
+        return view('marks.edit', compact('student', 'mark'));
     }
+    
 
     public function update(Request $request, Student $student, Mark $mark)
-    {
-        $request->validate([
-            'subject' => 'required|string',
-            'marks.*.id' => 'required|integer|exists:marks,id',
-            'marks.*.monthly_marks' => 'nullable|integer',
-            'marks.*.mid_term_marks' => 'nullable|integer',
-            'marks.*.final_marks' => 'nullable|integer',
+{
+    $request->validate([
+        'marks.*.id' => 'required|integer|exists:marks,id',
+        'marks.*.monthly_marks' => 'nullable|integer',
+        'marks.*.mid_term_marks' => 'nullable|integer',
+        'marks.*.final_marks' => 'nullable|integer',
+    ]);
+
+    foreach ($request->marks as $markData) {
+        $markToUpdate = Mark::findOrFail($markData['id']);
+        $markToUpdate->update([
+            'monthly_marks' => $markData['monthly_marks'],
+            'mid_term_marks' => $markData['mid_term_marks'],
+            'final_marks' => $markData['final_marks'],
         ]);
-
-        $mark->update($request->all());
-
-        return redirect()->route('students.marks.index', $student)->with('success', 'Marks updated successfully.');
     }
+
+    return redirect()->route('students.marks.index', $student)->with('success', 'Marks updated successfully.');
+}
+
 
     public function destroy(Student $student, Mark $mark)
     {
@@ -83,16 +92,18 @@ class MarkController extends Controller
     public function download()
     {
         $mark = Mark::all();
+        $mark=Student::all();
+        // $pdf = PDF::loadView('marks.download', compact('mark'));
 
         $filename = "student_marks.csv";
         $handle = fopen($filename, 'w+');
-        fputcsv($handle, ['ID', 'Roll Number', 'Name','subject','monthly_marks','mid_term_marks','final_marks', ]);
+        fputcsv($handle, [ 'Roll Number', 'Name','subject','monthly_marks','mid_term_marks','final_marks', ]);
 
         foreach ($mark as $mark) {
             fputcsv($handle, [
-                $mark->id,
-                $mark->roll_no,
-                $mark->name,
+                // $mark->id,
+                // $mark->roll_no,
+                // $mark->name,
                 $mark->subject,
                 $mark->monthly_marks,
                 $mark->mid_term_marks,

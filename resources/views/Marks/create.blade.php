@@ -1,3 +1,4 @@
+{{-- resources\views\Marks\create.blade.php --}}
 @extends('layouts.app')
 
 @section('content')
