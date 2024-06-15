@@ -10,14 +10,14 @@
     <table class="table">
         <thead>
             <tr>
-                {{-- <th>Roll Number</th> --}}
-                {{-- <th>Name</th> --}}
+                <th>Roll Number</th>
+                <th>Name</th>
                 <th>Subject</th>
                 <th>Monthly Marks</th>
                 <th>Mid-Term Marks</th>
                 <th>Final Marks</th>
                 {{-- <th>Marks</th> --}}
-                {{-- <th>Actions</th> --}}
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -30,8 +30,8 @@
             {{-- @endforeach --}}
            
             @foreach ($marks as $mark)
-            {{-- <td>{{ $student->roll_no }}</td> --}}
-            {{-- <td>{{ $student->name}}</td> --}}
+            <td>{{ $student->roll_no }}</td>
+            <td>{{ $student->name}}</td>
                     <td>{{ $mark->subject }}</td>
                     <td>{{ $mark->monthly_marks }}</td>
                     <td>{{ $mark->mid_term_marks}}</td>

@@ -90,34 +90,31 @@ class MarkController extends Controller
         return redirect()->route('students.marks.index', $student)->with('success', 'Marks deleted successfully.');
     }
     public function download()
-    {
-        $mark = Mark::all();
-        $mark=Student::all();
-        // $pdf = PDF::loadView('marks.download', compact('mark'));
+{
+    $marks = Mark::with('student')->get(); // Eager load students with their marks
 
-        $filename = "student_marks.csv";
-        $handle = fopen($filename, 'w+');
-        fputcsv($handle, [ 'Roll Number', 'Name','subject','monthly_marks','mid_term_marks','final_marks', ]);
+    $filename = "student_marks.csv";
+    $handle = fopen($filename, 'w+');
+    fputcsv($handle, ['Roll Number', 'Name', 'Subject', 'Monthly Marks', 'Mid Term Marks', 'Final Marks']);
 
-        foreach ($mark as $mark) {
-            fputcsv($handle, [
-                // $mark->id,
-                // $mark->roll_no,
-                // $mark->name,
-                $mark->subject,
-                $mark->monthly_marks,
-                $mark->mid_term_marks,
-                $mark->final_marks  
-                
-            ]);
-        }
-
-        fclose($handle);
-
-        $headers = [
-            'Content-Type' => 'text/csv',
-        ];
-
-        return response()->download($filename, $filename, $headers)->deleteFileAfterSend(true);
+    foreach ($marks as $mark) {
+        fputcsv($handle, [
+            $mark->student->roll_no,
+            $mark->student->name,
+            $mark->subject,
+            $mark->monthly_marks,
+            $mark->mid_term_marks,
+            $mark->final_marks
+        ]);
     }
+
+    fclose($handle);
+
+    $headers = [
+        'Content-Type' => 'text/csv',
+    ];
+
+    return response()->download($filename, $filename, $headers)->deleteFileAfterSend(true);
+}
+
 }

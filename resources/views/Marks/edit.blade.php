@@ -37,6 +37,8 @@
                 @endforeach
             </tbody>
         </table>
+        @csrf
+        @method('PUT')
         <button type="submit" class="btn btn-primary">Update Marks</button>
     </form>
 </div>

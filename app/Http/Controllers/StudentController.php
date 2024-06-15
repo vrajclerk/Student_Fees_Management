@@ -93,18 +93,16 @@ class StudentController extends Controller
 
     public function search(Request $request)
     {
-        $roll_no = $request->input('search_roll_no');
-        $student = Student::where('roll_no', $roll_no)->get();
-
-        $name = $request->input('search_roll_no');
-        $student = Student::where('name', $name)->get();
-
-        if ($student->isEmpty()) {
-            return redirect()->route('students.index')->with('error', 'No records found with Roll Number: ' . $roll_no);
-        }
-
-        return view('students.index', compact('student'));
+        $query = $request->input('query');
+        
+        // Search by roll number or name
+        $student = Student::where('roll_no', 'LIKE', "%{$query}%")
+                            ->orWhere('name', 'LIKE', "%{$query}%")
+                            ->get();
+        
+        return view('students.index', compact('student'))->with('success', 'Search results displayed below.');
     }
+
 
     public function download()
     {
