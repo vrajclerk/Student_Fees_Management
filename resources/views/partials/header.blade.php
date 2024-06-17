@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <a class="img" href="/">
-    <img src="{{ asset('images/cep_logo.jpg') }}" alt="Logo" class="logo" style="height: 60px; width:40px auto;"></a>
+    <img src="{{ asset('images/cep_logo.svg') }}" alt="Logo" class="logo" style="height: 60px; width:40px auto;"></a>
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
     <nav>
     <a class="navbar-brand" href="/">CLERK'S EDUCATION POINT</a></nav>

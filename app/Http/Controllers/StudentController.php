@@ -30,7 +30,7 @@ class StudentController extends Controller
 
         $student = $students->get();
 
-        // $student = Student::all();
+        // $student = Student::all();   
         return view('students.index', compact('student'));
     }
 
