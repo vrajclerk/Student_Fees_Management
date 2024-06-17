@@ -4,6 +4,24 @@
 @section('content')
 
     <h2>Student Records</h2> 
+    <div>
+        <form method="GET" action="{{ route('students.index') }}" class="float-center">
+    
+            <div class="form-group ">
+                {{-- <label for="payment_status">Filter by Fees Status</label> --}}
+                <select name="payment_status" id="payment_status" class="$form-select-feedback-icon-size:        $input-height-inner-half $input-height-inner-half; ">
+                    <option value=""> Select Fees Status </option>
+                    <option value="fully_paid">Fully Paid</option>
+                    <option value="partially_paid">Partially Paid</option>
+                    <option value="not_paid">Not Paid</option>
+                </select>
+                <button type="submit" class="btn btn-primary">Filter</button>
+            </div>
+           
+        </form>
+    </div>
+   
+<div>
     <form action="{{ route('students.search') }}" method="POST" class="form-inline mb-3 float-right">
         @csrf
         <input type="text" name="query" class="form-control mr-3" size="22" placeholder="Search by Roll No or Name" required>
@@ -13,6 +31,7 @@
             </svg>
         </button>
     </form> 
+</div>
 
     <a href="{{ route('students.create') }}" class="btn btn-primary mb-3 float-left">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-person-add" viewBox="0 0 16 16">
@@ -21,6 +40,7 @@
         </svg> Student
     </a>
 
+   
     @if(session('success'))
     <div class="alert alert-success" id="success-message">{{ session('success') }}</div>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -48,7 +68,7 @@
 
                     <th scope="col">Date</th>
                     <th scope="col">Actions</th>
-                    <th scope="col" style="width:5%">Status</th>
+                    <th scope="col" style="width:5%"> Fees Status</th>
                 </tr>
             </thead>
             <tbody class="table-group-divider ">
@@ -75,15 +95,18 @@
                             </a>
 
                         </td>
-                        @if( $student->total_fees==$student->fees_paid)
+                        <td>{{ $student->payment_status }}</td>
+
+                        {{-- @if( $student->total_fees==$student->fees_paid)
                         <td>{{"Fully Paid"}} </td>
 
                         @elseif($student->total_fees>$student->fees_paid)
                         <td>{{"Partially Paid"}} </td>
-                        @elseif($student->fees_paid==0)
+
+                        @elseif( $student->total_fees==$student->remaining_fees)
                         <td>{{"Not Paid"}} </td>
                        
-                        @endif
+                        @endif --}}
                     </tr>
                 @endforeach
             </tbody>

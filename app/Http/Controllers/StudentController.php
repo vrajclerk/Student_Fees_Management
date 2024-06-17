@@ -11,9 +11,26 @@ class StudentController extends Controller
     {
         $this->middleware('auth');
     }
-    public function index()
+    public function index( Request $request)
     {
-        $student = Student::all();
+        $paymentStatus = $request->get('payment_status');
+
+        $students = Student::query();
+
+        if ($paymentStatus) {
+            if ($paymentStatus == 'fully_paid') {
+                $students->where('remaining_fees', 0);
+            } elseif ($paymentStatus == 'not_paid') {
+                $students->where('fees_paid', 0);
+            } elseif ($paymentStatus == 'partially_paid') {
+                $students->where('fees_paid', '>', 0)->whereColumn('fees_paid', '<', 'total_fees');
+            }
+        }
+
+
+        $student = $students->get();
+
+        // $student = Student::all();
         return view('students.index', compact('student'));
     }
 
@@ -102,6 +119,7 @@ class StudentController extends Controller
         // Search by roll number or name
         $student = Student::where('roll_no', 'LIKE', "%{$query}%")
                             ->orWhere('name', 'LIKE', "%{$query}%")
+                            // ->orWhere('status','LIKE', "%{$query}%")
                             ->get();
         
         return view('students.index', compact('student'))->with('success', 'Search results displayed below.');
