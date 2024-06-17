@@ -1,5 +1,5 @@
 {{-- resources\views\Marks\index.blade.php --}}
-@extends('layouts.app')
+@extends('lay.app')
 
 @section('content')
 <div class="container">

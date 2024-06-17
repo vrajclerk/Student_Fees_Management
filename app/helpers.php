@@ -1,4 +1,3 @@
-// app/helpers.php
 <?php
 if (!function_exists('get_formatted_date')) {
     function get_formatted_date($date1)

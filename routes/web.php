@@ -4,6 +4,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\MarkController;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Auth\LoginController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -18,6 +20,11 @@ use App\Http\Controllers\MarkController;
 Route::get('/', function () {
     return view('welcome');
 });
+
+
+
+
+Route::group(['middleware' => ['auth']], function () {
 Route::get('/', [StudentController::class, 'index'])->name('students.index');
 Route::get('/students/create', [StudentController::class, 'create'])->name('students.create');
 Route::post('/students', [StudentController::class, 'store'])->name('students.store');
@@ -39,8 +46,11 @@ Route::prefix('students/{student}')->group(function () {
     Route::put('marks/{mark}/update', [MarkController::class, 'update'])->name('students.marks.update');
     Route::delete('marks/{mark}/ddelete', [MarkController::class, 'destroy'])->name('students.marks.destroy');
     
-});
+
 
 Route::post('marks/download', [MarkController::class, 'download'])->name('students.marks.download');
 
+
+});
+});
 

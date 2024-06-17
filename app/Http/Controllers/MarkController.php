@@ -9,6 +9,11 @@ use PDF;
 
 class MarkController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     // private $subjects = [
     //     'Account',
     //     'Economics',
