@@ -14,15 +14,7 @@ class MarkController extends Controller
         $this->middleware('auth');
     }
 
-    // private $subjects = [
-    //     'Account',
-    //     'Economics',
-    //     'Statastics',
-    //     'B.A.',
-    //     'English',
-    //     'Gujarati',
-    //     'Computer'
-    // ];
+
 
     public function index(Student $student)
     {
@@ -59,14 +51,15 @@ class MarkController extends Controller
     }
 
 
-    public function edit(Student $student)
+    public function edit(Student $student, Mark $mark)
     {
-        $mark = $student->marks; // Retrieve all marks associated with the student
-        return view('marks.edit', compact('student', 'mark'));
+        $marks = $student->marks; // Retrieve all marks associated with the student
+        return view('marks.edit', compact('student', 'marks'));
     }
     
+    
 
-    public function update(Request $request, Student $student, Mark $mark)
+    public function update(Request $request, Student $student)
 {
     $request->validate([
         'marks.*.id' => 'required|integer|exists:marks,id',
@@ -84,7 +77,7 @@ class MarkController extends Controller
         ]);
     }
 
-    return redirect()->route('students.marks.index', $student)->with('success', 'Marks updated successfully.');
+    return redirect()->route('students.marks.index', $student->id)->with('success', 'Marks updated successfully.');
 }
 
 

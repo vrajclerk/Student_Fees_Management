@@ -43,8 +43,8 @@ Route::prefix('students/{student}')->group(function () {
     Route::get('marks/create', [MarkController::class, 'create'])->name('students.marks.create');
     Route::post('marks', [MarkController::class, 'store'])->name('students.marks.store');
     Route::get('marks/{mark}/edit', [MarkController::class, 'edit'])->name('students.marks.edit');
-    Route::put('marks/{mark}/update', [MarkController::class, 'update'])->name('students.marks.update');
-    Route::delete('marks/{mark}/ddelete', [MarkController::class, 'destroy'])->name('students.marks.destroy');
+    Route::put('marks/{mark}', [MarkController::class, 'update'])->name('students.marks.update');
+    Route::delete('marks/{mark}', [MarkController::class, 'destroy'])->name('students.marks.destroy');
     
 
 
@@ -53,4 +53,11 @@ Route::post('marks/download', [MarkController::class, 'download'])->name('studen
 
 });
 });
-
+Route::prefix('students/{student}')->group(function () {
+    Route::get('marks', [MarkController::class, 'index'])->name('students.marks.index');
+    Route::get('marks/create', [MarkController::class, 'create'])->name('students.marks.create');
+    Route::post('marks', [MarkController::class, 'store'])->name('students.marks.store');
+    Route::get('marks/{mark}/edit', [MarkController::class, 'edit'])->name('students.marks.edit');
+    Route::put('marks', [MarkController::class, 'update'])->name('students.marks.update');
+    Route::delete('marks/{mark}', [MarkController::class, 'destroy'])->name('students.marks.destroy');
+});

@@ -12,7 +12,7 @@
             <form method="post" action="{{ route('students.store') }}">
                 @csrf
                 <div class="form-group mb-3">
-                    <label for="roll_no" class="form-label text-success font-weight-bold" >Roll Number</label>
+                    <label for="roll_no" class="form-label text-success font-weight-bold ">Roll Number</label>
                     <input type="text" class="form-control" id="roll_no" name="roll_no" required>
                 </div>
                 <div class="form-group mb-3">

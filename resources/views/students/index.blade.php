@@ -36,28 +36,32 @@
     @if($student->isEmpty())
         <p>No students found.</p>
     @else
-        <table class="table table-light table-bordered">
+        <table class="table  table-bordered table-striped-columns table-hover" style="width:100%">
             <thead class="table-dark">
-                <tr>
+                <tr class="text-center">
                     {{-- <th scope="col">ID</th> --}}
-                    <th scope="col">Roll Number</th>
-                    <th scope="col">Name</th>
+                    <th scope="col" style="width:5%">Roll Number</th>
+                    <th scope="col" style="width:15%">Name</th>
                     <th scope="col">Total Fees</th>
                     <th scope="col">Fees Paid</th>
-                    <th scope="col">Remaining Fees</th>
+                    <th scope="col"style="width:10%">Remaining Fees</th>
+
                     <th scope="col">Date</th>
                     <th scope="col">Actions</th>
+                    <th scope="col" style="width:5%">Status</th>
                 </tr>
             </thead>
-            <tbody class="table-group-divider">
+            <tbody class="table-group-divider ">
                 @foreach ($student as $student)
-                    <tr>
+                <tr class="text-center">
                         {{-- <td>{{ $student->id }}</td> --}}
                         <td>{{ $student->roll_no }}</td>
                         <td>{{ $student->name }}</td>
                         <td>{{ $student->total_fees }}</td>
                         <td>{{ $student->fees_paid }}</td>
+                        
                         <td>{{ $student->remaining_fees }}</td>
+                        
                         <td>{{ old('date', \Carbon\Carbon::parse($student->date)->format('d-m-Y')) }}</td>
                         <td class="actions">
                             <a href="{{ route('students.edit', ['id' => $student->id]) }}">
@@ -71,6 +75,15 @@
                             </a>
 
                         </td>
+                        @if( $student->total_fees==$student->fees_paid)
+                        <td>{{"Fully Paid"}} </td>
+
+                        @elseif($student->total_fees>$student->fees_paid)
+                        <td>{{"Partially Paid"}} </td>
+                        @elseif($student->fees_paid==0)
+                        <td>{{"Not Paid"}} </td>
+                       
+                        @endif
                     </tr>
                 @endforeach
             </tbody>

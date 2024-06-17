@@ -11,22 +11,22 @@
         @csrf
         @method('PUT')
         <div class="form-group mb-3">
-        <label for="roll_no">Roll Number</label>
+        <label for="roll_no" class="text-success font-italic font-weight-bold">Roll Number :</label>
         <input type="text" id="roll_no" name="roll_no" value="{{ $student->roll_no }}" required>
         </div>
         <div class="form-group mb-3">
-        <label for="name">Name</label>
+        <label for="name" class="text-success font-italic font-weight-bold">Name :</label>
         <input type="text" id="name" name="name" value="{{ $student->name }}" required>
         </div>
         <div class="form-group mb-3">
-        <label for="additional_fees">Additional Fees Paid</label>
-        <input type="number" id="additional_fees" name="additional_fees" step="0.01" required>
+        <label for="additional_fees" class="text-success font-italic font-weight-bold">Additional Fees Paid :</label>
+        <input type="number" id="additional_fees" name="additional_fees" step="1000" required>
         </div>
-        <div class="form-group mb-3">
-        <label for="date">Date</label>
+        <div class="form-group mb-3 text-success font-italic font-weight-bold">
+        <label for="date">Date :</label>
         <input type="date" id="date" name="date" value="{{ $student->date }}" required>
         </div>
-        <div class="form-group ">
+        <div class="form-group text-success font-italic">
         <button type="submit" class="btn btn-primary">Update Student</button>
         </div>
     </form>
