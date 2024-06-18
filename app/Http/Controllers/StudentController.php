@@ -23,9 +23,9 @@ class StudentController extends Controller
 
         if ($paymentStatus) {
             if ($paymentStatus == 'fully_paid') {
-                $studentsQuery->whereColumn('remaining_fees', 'total_fees');
+                $studentsQuery->where('remaining_fees', 0);    
             } elseif ($paymentStatus == 'not_paid') {
-                $studentsQuery->where('remaining_fees', 0);
+                $studentsQuery->whereColumn('remaining_fees', 'total_fees');
             } elseif ($paymentStatus == 'partially_paid') {
                 $studentsQuery->where('remaining_fees', '>', 0)->whereColumn('remaining_fees', '<', 'total_fees');
             }
