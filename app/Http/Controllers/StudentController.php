@@ -4,6 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Student;
+use App\Models\Course;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\URL;
+
 
 class StudentController extends Controller
 {
@@ -11,27 +15,40 @@ class StudentController extends Controller
     {
         $this->middleware('auth');
     }
-    public function index( Request $request)
+    public function index(Request $request)
     {
+    $students = Student::all();
         $paymentStatus = $request->get('payment_status');
-
-        $students = Student::query();
+        $studentsQuery = Student::query();
 
         if ($paymentStatus) {
             if ($paymentStatus == 'fully_paid') {
-                $students->where('remaining_fees', 0);
+                $studentsQuery->whereColumn('remaining_fees', 'total_fees');
             } elseif ($paymentStatus == 'not_paid') {
-                $students->where('fees_paid', 0);
+                $studentsQuery->where('remaining_fees', 0);
             } elseif ($paymentStatus == 'partially_paid') {
-                $students->where('fees_paid', '>', 0)->whereColumn('fees_paid', '<', 'total_fees');
+                $studentsQuery->where('remaining_fees', '>', 0)->whereColumn('remaining_fees', '<', 'total_fees');
             }
         }
+        $perPage = 10;
+        $page = LengthAwarePaginator::resolveCurrentPage();
+        $students = new LengthAwarePaginator(
+            $studentsQuery->forPage($page, $perPage)->get(),
+            $studentsQuery->count(),
+            $perPage,
+            $page,
+            ['path' => URL::current(), 'query' => $request->query()]
+        );
+        $students->appends(['payment_status' => $paymentStatus]);
+        
+        if ($request->ajax()) {
+            return response()->json([
+                'students' => $students->items(),
+                'pagination' => (string) $students->links()
+            ]);
+        }
 
-
-        $student = $students->get();
-
-        // $student = Student::all();   
-        return view('students.index', compact('student'));
+        return view('students.index', compact('students'));
     }
 
     public function create()

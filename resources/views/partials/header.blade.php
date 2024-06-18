@@ -1,9 +1,9 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <a class="img" href="/">
-    <img src="{{ asset('images/cep_logo.svg') }}" alt="Logo" class="logo" style="height: 60px; width:40px auto;"></a>
+    <img src="{{ asset('images/cep_logo-1.png') }}" alt="Logo" class="logo" style="height: 80px; width70px auto;"></a>
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
     <nav>
-    <a class="navbar-brand" href="/">CLERK'S EDUCATION POINT</a></nav>
+    <a class="navbar-brand " href="/">CLERK'S EDUCATION POINT</a></nav>
     
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
