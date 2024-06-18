@@ -114,7 +114,7 @@
                 @endforeach
                 
             </tbody>
-
+            
         </table>
         <div id="paginationLinks">
             {{ $students->links() }}

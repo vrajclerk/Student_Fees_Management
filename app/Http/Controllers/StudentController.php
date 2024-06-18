@@ -30,7 +30,7 @@ class StudentController extends Controller
                 $studentsQuery->where('remaining_fees', '>', 0)->whereColumn('remaining_fees', '<', 'total_fees');
             }
         }
-        $perPage = 10;
+        $perPage = 5;
         $page = LengthAwarePaginator::resolveCurrentPage();
         $students = new LengthAwarePaginator(
             $studentsQuery->forPage($page, $perPage)->get(),
