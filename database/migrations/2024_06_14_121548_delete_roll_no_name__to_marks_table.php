@@ -14,8 +14,8 @@ class DeleteRollNoNameToMarksTable extends Migration
     public function up()
     {
         Schema::table('marks', function (Blueprint $table) {
-            $table->dropColumn('roll_no');
-            $table->dropColumn('name');
+            // $table->dropColumn('roll_no');
+            // $table->dropColumn('name');
         });
     }
 

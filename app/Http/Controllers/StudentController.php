@@ -6,7 +6,9 @@ use Illuminate\Http\Request;
 use App\Models\Student;
 use App\Models\Course;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\URL;
+
 
 
 class StudentController extends Controller
@@ -17,37 +19,27 @@ class StudentController extends Controller
     }
     public function index(Request $request)
     {
-    $students = Student::all();
-        $paymentStatus = $request->get('payment_status');
-        $studentsQuery = Student::query();
+        $paymentStatus = $request->input('payment_status');
 
+        $query = Student::query();
+    
         if ($paymentStatus) {
             if ($paymentStatus == 'fully_paid') {
-                $studentsQuery->where('remaining_fees', 0);    
-            } elseif ($paymentStatus == 'not_paid') {
-                $studentsQuery->whereColumn('remaining_fees', 'total_fees');
+                $query->where('remaining_fees', 0);
             } elseif ($paymentStatus == 'partially_paid') {
-                $studentsQuery->where('remaining_fees', '>', 0)->whereColumn('remaining_fees', '<', 'total_fees');
+                // $query->whereColumn('remaining_fees', '>', 0)
+                    $query->whereColumn('remaining_fees', '<', 'total_fees');
+            } elseif ($paymentStatus == 'not_paid') {
+                $query->whereColumn('remaining_fees', 'total_fees');
             }
+            // elseif($paymentStatus=='all'){
+            //     $query->where('payment_status','LIKE',"%{$paymentStatus}%");
+            // }
         }
-        $perPage = 5;
-        $page = LengthAwarePaginator::resolveCurrentPage();
-        $students = new LengthAwarePaginator(
-            $studentsQuery->forPage($page, $perPage)->get(),
-            $studentsQuery->count(),
-            $perPage,
-            $page,
-            ['path' => URL::current(), 'query' => $request->query()]
-        );
-        $students->appends(['payment_status' => $paymentStatus]);
+    
+        $students = $query->orderBy('roll_no','asc')->paginate(5);
         
-        if ($request->ajax()) {
-            return response()->json([
-                'students' => $students->items(),
-                'pagination' => (string) $students->links()
-            ]);
-        }
-
+    
         return view('students.index', compact('students'));
     }
 
@@ -134,12 +126,12 @@ class StudentController extends Controller
         $query = $request->input('query');
         
         // Search by roll number or name
-        $student = Student::where('roll_no', 'LIKE', "%{$query}%")
+        $students = Student::where('roll_no', 'LIKE', "%{$query}%")
                             ->orWhere('name', 'LIKE', "%{$query}%")
                             // ->orWhere('status','LIKE', "%{$query}%")
-                            ->get();
+                            ->paginate(5);
         
-        return view('students.index', compact('student'))->with('success', 'Search results displayed below.');
+        return view('students.index', compact('students'))->with('success', 'Search results displayed below.');
     }
 
 
@@ -149,7 +141,7 @@ class StudentController extends Controller
 
         $filename = "student_records.csv";
         $handle = fopen($filename, 'w+');
-        fputcsv($handle, ['ID', 'Roll Number', 'Name', 'Total Fees', 'Fees Paid', 'Remaining Fees', 'Date']);
+        fputcsv($handle, ['ID', 'Roll Number', 'Name', 'Total Fees', 'Fees Paid', 'Remaining Fees', 'Date','Fees_Status']);
 
         foreach ($student as $student) {
             fputcsv($handle, [
@@ -159,7 +151,9 @@ class StudentController extends Controller
                 $student->total_fees,
                 $student->fees_paid,
                 $student->remaining_fees,
-                $student->date
+                $student->date,
+                $student->payment_status
+
             ]);
         }
 
