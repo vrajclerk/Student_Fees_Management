@@ -5,40 +5,28 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Student;
 use App\Models\Course;
+// Remove the duplicate import statement
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\URL;
+use App\Services\StudentService;
 
 
 
 class StudentController extends Controller
 {
-    public function __construct()
+    private $StudentService;
+
+    public function __construct(StudentService $studentService)
     {
         $this->middleware('auth');
+        $this->StudentService = $studentService;
     }
     public function index(Request $request)
     {
         $paymentStatus = $request->input('payment_status');
 
-        $query = Student::query();
-    
-        if ($paymentStatus) {
-            if ($paymentStatus == 'fully_paid') {
-                $query->where('remaining_fees', 0);
-            } elseif ($paymentStatus == 'partially_paid') {
-                // $query->whereColumn('remaining_fees', '>', 0)
-                    $query->whereColumn('remaining_fees', '<', 'total_fees');
-            } elseif ($paymentStatus == 'not_paid') {
-                $query->whereColumn('remaining_fees', 'total_fees');
-            }
-            // elseif($paymentStatus=='all'){
-            //     $query->where('payment_status','LIKE',"%{$paymentStatus}%");
-            // }
-        }
-    
-        $students = $query->orderBy('roll_no','asc')->paginate(5);
-        
+        $students = $this->StudentService->filterStudentsByPaymentStatus($paymentStatus); 
     
         return view('students.index', compact('students'));
     }

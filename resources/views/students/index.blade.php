@@ -5,11 +5,11 @@
 
     <h2 class="font-monospace fw-semibold ">Student Records</h2> 
     <div>
-        <form method="GET" action="{{ route('students.index') }}" class="float-center">
+        <form method="GET" action="{{ route('students.index') }}" class="float-center" id="filterform">
     
             <div class="form-group ">
                 {{-- <label for="payment_status">Filter by Fees Status</label> --}}
-                <select name="payment_status" id="payment_status" class="$form-select-feedback-icon-size:        $input-height-inner-half $input-height-inner-half; ">
+                <select name="payment_status" id="payment_status" class="$form-select-feedback-icon-size:$input-height-inner-half $input-height-inner-half; ">
                     <option value=""> Select Fees Status </option>
                     {{-- <option value="all">All</option> --}}
                     <option value="fully_paid">Fully Paid</option>
@@ -45,15 +45,15 @@
 
    
     @if(session('success'))
-    <div class="alert alert-success" id="success-message">{{ session('success') }}</div>
+    {{-- <div class="alert alert-success" id="success-message">{{ session('success') }}</div>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         $(document).ready(function() {
             setTimeout(function() {
                 $('#success-message').fadeOut('fast');
-            }, 3000); // 5000 milliseconds = 5 seconds
+            }, 3000); 
         });
-    </script>
+    </script> --}}
     @endif
 
     @if($students->isEmpty())
@@ -119,8 +119,8 @@
             </tbody>
             
         </table>
-        <div id="paginationLinks">
-            {{ $students->links() }}
+        <div id="row">
+            {{ $students->onEachSide(3)->links() }}
         </div>
     @endif
     
@@ -137,41 +137,8 @@ $(document).ready(function(){
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
 $(document).ready(function() {
-    function fetchStudents(page = 1) {
-        var paymentStatus = $('#payment_status').val();
-        $.ajax({
-            url: '{{ route("students.index") }}',
-            type: 'GET',
-            data: { payment_status: paymentStatus, page: page },
-            success: function(response) {
-                var tbody = $('#studentTableBody');
-                tbody.empty();
-                $.each(response.students.data, function(index, student) {
-                    var row = '<tr>' +
-                        '<td>' + student.roll_no + '</td>' +
-                        '<td>' + student.name + '</td>' +
-                        '<td>' + student.total_fees + '</td>' +
-                        '<td>' + student.fees_paid + '</td>' +
-                        '<td>' + student.remaining_fees + '</td>' +
-                        '<td>' + student.payment_status + '</td>' +
-                        '</tr>';
-                    tbody.append(row);
-                });
-
-                // Update pagination links
-                $('#paginationLinks').html(response.pagination);
-            }
-        });
-    }
-
     $('#payment_status').change(function() {
-        fetchStudents();
-    });
-
-    $(document).on('click', '.pagination a', function(e) {
-        e.preventDefault();
-        var page = $(this).attr('href').split('page=')[1];
-        fetchStudents(page);
+        $('#filterForm').submit();
     });
 });
 </script>
