@@ -6,6 +6,8 @@ use App\Http\Controllers\StudentController;
 use App\Http\Controllers\MarkController;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Auth\LoginController;
+use App\Mail\NewUserWelcomeMail;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -21,11 +23,16 @@ use App\Http\Controllers\Auth\LoginController;
 Route::get('/', function () {
     return view('welcome');
 });
+Auth::routes();
 
-
+Route::get('/email',function(){
+    return new NewUserWelcomeMail();
+});
 
 
 Route::group(['middleware' => ['auth']], function () {
+ 
+
 Route::get('/', [StudentController::class, 'index'])->name('students.index');
 Route::get('/students/create', [StudentController::class, 'create'])->name('students.create');
 Route::post('/students', [StudentController::class, 'store'])->name('students.store');
@@ -63,9 +70,16 @@ use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
+
+
+
 // use Illuminate\Support\Facades\Route;
 
+
 Route::middleware('guest')->group(function () {
+
+   
+    
     Route::get('register', [RegisteredUserController::class, 'create'])
                 ->name('register');
 

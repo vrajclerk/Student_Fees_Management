@@ -2,15 +2,43 @@
 
 @section('content')
 <div class="container">
-    <h2>Marks for {{ $student->name }}</h2>
+    <h2 style="color:darkblue">
+        Marks for <span style="color: green;">{{ $student->name }}</span> ,&nbsp;&nbsp;&nbsp;
+        Roll-Number: <span style="color: green;">{{ $student->roll_no }}</span>
+    </h2>
+    
+    
 
     <a href="{{ route('students.marks.create', $student->id) }}" class="btn btn-primary">Add Marks</a>
+    @if (session('success'))
+    <div id="successMessage" class="alert alert-success alert-dismissible fade show" role="alert">
+        {{ session('success') }}
+       
+        <button type="button" class="btn-close btn-danger float-end" data-bs-dismiss="alert" aria-label="Close"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
+            <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/>
+          </svg></button>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(function() {
+                var successMessage = document.getElementById('successMessage');
+                if (successMessage) {
+                    successMessage.style.transition = 'opacity 1s ease';
+                    successMessage.style.opacity = '0';
+                    setTimeout(function() {
+                        successMessage.style.display = 'none';
+                    }, 1000); // 1 second for the fade out transition
+                }
+            }, 4000); // 4 seconds
+        });
+    </script>
+    @endif
     
     <table class="table  table-bordered table-striped-columns table-hover">
         <thead class="table-dark">
             <tr class="text-center">
-                <th >Roll Number</th>
-                <th style="width:15%">Name</th>
+                {{-- <th >Roll Number</th> --}}
+                {{-- <th style="width:15%">Name</th> --}}
                 <th >Subject</th>
                 <th >Monthly Marks</th>
                 <th >Mid-Term Marks</th>
@@ -21,8 +49,8 @@
         <tbody class="table-group-divider">
             @foreach ($marks as $mark)
             <tr class="text-center">
-                <td>{{ $student->roll_no }}</td>
-                <td>{{ $student->name }}</td>
+                {{-- <td>{{ $student->roll_no }}</td> --}}
+                {{-- <td>{{ $student->name }}</td> --}}
                 <td>{{ $mark->subject }}</td>
                 <td>{{ $mark->monthly_marks }}</td>
                 <td>{{ $mark->mid_term_marks }}</td>

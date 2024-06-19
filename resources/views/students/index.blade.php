@@ -3,7 +3,7 @@
 
 @section('content')
 
-    <h2 class="font-monospace fw-semibold ">Student Records</h2> 
+    <h2 class="font-monospace font-weight-bold" style="color:rgb(6, 138, 17)">Student Records</h2> 
     <div>
         <form method="GET" action="{{ route('students.index') }}" class="float-center" id="filterform">
     
@@ -44,16 +44,29 @@
     </a>
 
    
-    @if(session('success'))
-    {{-- <div class="alert alert-success" id="success-message">{{ session('success') }}</div>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    @if (session('success'))
+    <div id="successMessage" class="alert alert-success alert-dismissible fade show" role="alert">
+        {{ session('success') }}
+       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <button type="button" class="btn-close btn-primary  btn-float-end" data-bs-dismiss="alert" aria-label="Close">OK</button>
+          
+    </div>
     <script>
-        $(document).ready(function() {
+        document.addEventListener('DOMContentLoaded', function() {
             setTimeout(function() {
-                $('#success-message').fadeOut('fast');
-            }, 3000); 
+                var successMessage = document.getElementById('successMessage');
+                if (successMessage) {
+                    successMessage.style.transition = 'opacity 1s ease';
+                    successMessage.style.opacity = '0';
+                    setTimeout(function() {
+                        successMessage.style.display = 'none';
+                    }, 1000); // 1 second for the fade out transition
+                }
+            }, 5000); // 5           seconds
         });
-    </script> --}}
+    </script>
+
+
     @endif
 
     @if($students->isEmpty())
@@ -97,11 +110,11 @@
                                   </svg></button>
                             </a> | |     
                             <a href="{{ route('students.marks.index', $student->id) }}" class="custom-tooltip" data-toggle="tooltip" title="Add and view student marks">
-                                <button class="btn btn-info d-inline-block m-2">View Marks</button>
+                                <button class="btn  d-inline-block m-2" style="background-color:rgb(113, 202, 78)">View Marks</button>
                             </a>
 
                         </td>
-                        <td>{{ $student->payment_status }}</td>
+                        <td style="background-color:yellow">{{ $student->payment_status }}</td>
 
                         {{-- @if( $student->total_fees==$student->fees_paid)
                         <td>{{"Fully Paid"}} </td>

@@ -4,11 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Student;
-use App\Models\Course;
-// Remove the duplicate import statement
-use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Pagination\Paginator;
-use Illuminate\Support\Facades\URL;
+
 use App\Services\StudentService;
 
 
@@ -49,7 +45,7 @@ class StudentController extends Controller
         // Create a new student record using mass assignment
         Student::create($validatedData);
 
-        return redirect()->route('students.index')->with('success', 'Student added successfully');
+        return redirect()->route('students.index')->with('success', 'Student added successfully',array('timeout' => 3000));
     }
 
     public function edit($id){
