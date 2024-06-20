@@ -21,6 +21,6 @@ class StudentService
             }
         }
 
-        return $query->orderBy('roll_no', 'asc')->paginate(5);
+        return $query->paginate(5);
     }   
 }

@@ -38,14 +38,14 @@ class StudentController extends Controller
             'roll_no' => 'required|string|max:50|unique:students',
             'name' => 'required|string|max:255',
             'total_fees' => 'required|numeric',
-            'fees_paid' => 'required|numeric|min:500,max:30000',
-            'date' => 'required|date|after:today',
+            'fees_paid' => 'required|numeric',
+            'date' => 'required|date'
         ]);
 
         // Create a new student record using mass assignment
         Student::create($validatedData);
 
-        return redirect()->route('students.index')->with('success', 'Student added successfully',array('timeout' => 3000));
+        return redirect()->route('students.index')->with('success', 'Student added successfully');
     }
 
     public function edit($id){
