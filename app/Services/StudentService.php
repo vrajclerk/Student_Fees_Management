@@ -23,4 +23,23 @@ class StudentService
 
         return $query->paginate(5);
     }   
+    public function filterStudentsByclass($class)
+    {
+        $query1 = Student::query();
+
+        if ($class) {
+            if ($class == '11_Morning') {
+            
+                $query1->where('class', '11_Morning');
+            } elseif ($class == '11_evening') {
+                $query1->where('class' ,'11_evening');
+            } elseif ($class == '12_Morning') {
+                $query1->where('class' ,'12_Morning');
+            } elseif ($class == '12_evening') {
+                $query1->where('class' ,'12_evening');
+        }
+
+        return $query1->paginate(5);
+    }   
+}
 }

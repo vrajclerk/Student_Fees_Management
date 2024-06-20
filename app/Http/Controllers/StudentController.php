@@ -20,11 +20,35 @@ class StudentController extends Controller
     }
     public function index(Request $request)
     {
-        $paymentStatus = $request->input('payment_status');
-
-        $students = $this->StudentService->filterStudentsByPaymentStatus($paymentStatus); 
+        $query = Student::query();
     
-        return view('students.index', compact('students'));
+        // Apply filters
+        if ($request->filled('payment_status')) {
+            switch ($request->payment_status) {
+                case 'fully_paid':
+                    $query->where('remaining_fees', 0);
+                    break;
+                case 'partially_paid':
+                    $query->whereColumn('remaining_fees', '>', 0)
+                          ->whereColumn('remaining_fees', '<', 'total_fees');
+                    break;
+                case 'not_paid':
+                    $query->whereColumn('remaining_fees', '=', 'total_fees');
+                    break;
+            }
+        }
+        
+        if ($request->filled('class')) {
+            $query->where('class', $request->class);
+        }
+        
+        $students = $query->paginate(10);
+        
+        // Get all classes for the filter dropdown
+        $classes = Student::distinct()->pluck('class');
+
+
+        return view('students.index', compact('students','classes'));
     }
 
     public function create()
@@ -33,23 +57,12 @@ class StudentController extends Controller
     }
     public function store(Request $request)
     {
-        // Validate the request data
-        // $validatedData = $request->validate([
-        //     'roll_no' => 'required|string|max:50|unique:students',
-        //     'name' => 'required|string|max:255',
-        //     'total_fees' => 'required|numeric',
-        //     'fees_paid' => 'required|numeric|min:0',
-        //     'date' => 'required|date'
-        // ]);
-
-        // Create a new student record using mass assignment
-        // Student::create($validatedData);
-
-        // return redirect()->route('students.index')->with('success', 'Student added successfully');
+        
     // Validate the request data with custom error messages
     $validatedData = $request->validate([
         'roll_no' => 'required|string|max:50|unique:students',
         'name' => 'required|string|max:255',
+        'class' => 'required|string',
         'total_fees' => 'required|numeric',
         'fees_paid' => 'required|numeric|min:0|max:' . ($request->input('total_fees') - $request->input('fees_paid')),
         'date' => 'required|date'
@@ -95,7 +108,6 @@ class StudentController extends Controller
     public function update(Request $request, $id)
     {
         
-
         $student = Student::find($id);
 
         // Check if the student exists
@@ -107,6 +119,7 @@ class StudentController extends Controller
         $request->validate([
             'roll_no' => 'required|string|max:50|unique:students,roll_no,' . $id,
             'name' => 'required|string|max:255',
+            'class'=> 'required',
             'additional_fees' => 'required|numeric',
             'date' => 'required|date',
             
@@ -116,6 +129,7 @@ class StudentController extends Controller
         // Update the student's data
         $student->name = $request->input('name');
         $student->roll_no = $request->input('roll_no');
+        $student->class = $request->input('class');
         $student->fees_paid += $request->input('additional_fees');
         $student->date = $request->input('date');
 
@@ -142,6 +156,7 @@ class StudentController extends Controller
         // Search by roll number or name
         $students = Student::where('roll_no', 'LIKE', "%{$query}%")
                             ->orWhere('name', 'LIKE', "%{$query}%")
+                            ->orWhere('class','LIKE',"%{{$query}%}")
                             // ->orWhere('status','LIKE', "%{$query}%")
                             ->paginate(5);
         
@@ -155,7 +170,7 @@ class StudentController extends Controller
 
         $filename = "student_records.csv";
         $handle = fopen($filename, 'w+');
-        fputcsv($handle, ['ID', 'Roll Number', 'Name', 'Total Fees', 'Fees Paid', 'Remaining Fees', 'Date','Fees_Status']);
+        fputcsv($handle, ['ID', 'Roll Number', 'Name','Class', 'Total Fees', 'Fees Paid', 'Remaining Fees', 'Date','Fees_Status']);
 
         foreach ($student as $student) {
             fputcsv($handle, [
@@ -180,23 +195,23 @@ class StudentController extends Controller
         return response()->download($filename, $filename, $headers)->deleteFileAfterSend(true);
     }
     
-    public function trash()
-    {
-        $students = Student::onlyTrashed()->get();
-        return view('students.trash', compact('students'));
-    }
+    // public function trash()
+    // {
+    //     $students = Student::onlyTrashed()->get();
+    //     return view('students.trash', compact('students'));
+    // }
 
-    public function restore($id)
-    {
-        $student = Student::withTrashed()->findOrFail($id);
-        $student->restore();
-        return redirect()->route('students.trash')->with('success', 'Student restored successfully');
-    }
+    // public function restore($id)
+    // {
+    //     $student = Student::withTrashed()->findOrFail($id);
+    //     $student->restore();
+    //     return redirect()->route('students.trash')->with('success', 'Student restored successfully');
+    // }
 
-    public function forceDelete($id)
-    {
-        $student = Student::withTrashed()->findOrFail($id);
-        $student->forceDelete();
-        return redirect()->route('students.index')->with('success', 'Student permanently deleted');
-    }
+    // public function forceDelete($id)
+    // {
+    //     $student = Student::withTrashed()->findOrFail($id);
+    //     $student->forceDelete();
+    //     return redirect()->route('students.index')->with('success', 'Student permanently deleted');
+    // }
 }

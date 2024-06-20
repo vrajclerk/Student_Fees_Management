@@ -3,8 +3,12 @@
     <img src="{{ asset('images/cep_logo-1.png') }}" alt="Logo" class="logo" style="height: 80px; width70px auto;"></a>
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
     <nav>
-    <a class="navbar-brand " href="/" style="color:blue ">CLERK'S EDUCATION POINT</a></nav>
-    
+    <a class="navbar-brand" href="/" style="color:blue" >CLERK'S EDUCATION POINT</a></nav>
+    <style>
+        .navbar-brand {
+          font-family: "Brush Script MT", cursive;
+        }
+        </style>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>

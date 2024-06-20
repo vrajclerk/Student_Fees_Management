@@ -19,8 +19,19 @@
         <input type="text" id="name" name="name" value="{{ $student->name }}" required>
         </div>
         <div class="form-group mb-3">
+        <label for="class" class="text-success font-italic font-weight-bold">Class :</label>
+        <select name="class" id="class" required>
+            <option value=""> <<<<< Select Class >>>>> </option>
+            <option value="11_Morning" {{old('class', $student->class )== '11_Morning' ? 'selected' : '' }}>11th (Morning)</option>
+            <option value="11_Evening" {{old('class', $student->class )== '11_Evening' ? 'selected' : '' }} >11th (Evening)</option>
+            <option value="12_Morning" {{old('class', $student->class )== '12_Morning' ? 'selected' : '' }}>12th (Morning)</option>
+            <option value="12_Evening" {{old('class', $student->class )== '12_Evening' ? 'selected' : '' }}>12th (Evening)</option>
+        </select>
+        </div>
+
+        <div class="form-group mb-3">
         <label for="additional_fees" class="text-success font-italic font-weight-bold">Additional Fees Paid :</label>
-        <input type="number" id="additional_fees" name="additional_fees" step="1000" required>
+        <input type="number" id="additional_fees" name="additional_fees" step="100" required>
         </div>
         <div class="form-group mb-3 text-success font-italic font-weight-bold">
         <label for="date">Date :</label>
