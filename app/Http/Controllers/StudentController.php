@@ -38,8 +38,8 @@ class StudentController extends Controller
             'roll_no' => 'required|string|max:50|unique:students',
             'name' => 'required|string|max:255',
             'total_fees' => 'required|numeric',
-            'fees_paid' => 'required|numeric',
-            'date' => 'required|date',
+            'fees_paid' => 'required|numeric|min:500,max:30000',
+            'date' => 'required|date|after:today',
         ]);
 
         // Create a new student record using mass assignment

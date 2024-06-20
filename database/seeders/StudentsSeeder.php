@@ -23,7 +23,7 @@ class StudentsSeeder extends Seeder
             'roll_no' => rand(1, 60), // Generate a random number between 10 and 99
              'name' => Str::random(10),
              'total_fees' => rand(25000, 30000), // Generate a random number between 1000 and 5000
-            'fees_paid' => rand(2000, 30000), // Generate a random number between 500 and 1000
+            'fees_paid' => rand(1000, 30000), // Generate a random number between 500 and 1000
             'date' => Carbon::now(),
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),

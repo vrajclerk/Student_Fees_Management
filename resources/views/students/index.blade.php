@@ -96,7 +96,16 @@
                         <td>{{ $student->total_fees }}</td>
                         <td>{{ $student->fees_paid }}</td>
                         
-                        <td>{{ $student->remaining_fees }}</td>
+                        <td style="background-color:
+                        @if ($student->fees_paid ==0)
+                            red
+                        @elseif ($student->fees_paid == $student->total_fees)
+                            rgb(113, 202, 78)
+                        @else
+                            orange
+                        @endif" >
+                        {{ $student->remaining_fees }}
+                    </td>
                         
                         <td>{{ old('date', \Carbon\Carbon::parse($student->date)->format('d-m-Y')) }}</td>
                         <td class="actions">
@@ -114,7 +123,24 @@
                             </a>
 
                         </td>
-                        <td style="background-color:yellow">{{ $student->payment_status }}</td>
+                        <td style="font-weight: bold">
+                            @php
+                                $remainingFees = $student->remaining_fees;
+                                $totalFees = $student->total_fees;
+                                $feesStatusColor = '';
+    
+                                if ($remainingFees == 0) {
+                                    $feesStatusColor = 'green'; // Fully Paid
+                                } elseif ($remainingFees == $totalFees) {
+                                    $feesStatusColor = 'green'; // Not Paid
+                                } else {
+                                    $feesStatusColor = 'orange'; // Partially Paid
+                                }
+                            @endphp
+                            <span style="color: {{ $feesStatusColor }}" >
+                                {{ $student->payment_status }}
+                            </span>
+                        </td>
 
                         {{-- @if( $student->total_fees==$student->fees_paid)
                         <td>{{"Fully Paid"}} </td>
