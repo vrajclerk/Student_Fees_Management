@@ -34,18 +34,48 @@ class StudentController extends Controller
     public function store(Request $request)
     {
         // Validate the request data
-        $validatedData = $request->validate([
-            'roll_no' => 'required|string|max:50|unique:students',
-            'name' => 'required|string|max:255',
-            'total_fees' => 'required|numeric',
-            'fees_paid' => 'required|numeric',
-            'date' => 'required|date'
-        ]);
+        // $validatedData = $request->validate([
+        //     'roll_no' => 'required|string|max:50|unique:students',
+        //     'name' => 'required|string|max:255',
+        //     'total_fees' => 'required|numeric',
+        //     'fees_paid' => 'required|numeric|min:0',
+        //     'date' => 'required|date'
+        // ]);
 
         // Create a new student record using mass assignment
-        Student::create($validatedData);
+        // Student::create($validatedData);
 
-        return redirect()->route('students.index')->with('success', 'Student added successfully');
+        // return redirect()->route('students.index')->with('success', 'Student added successfully');
+    // Validate the request data with custom error messages
+    $validatedData = $request->validate([
+        'roll_no' => 'required|string|max:50|unique:students',
+        'name' => 'required|string|max:255',
+        'total_fees' => 'required|numeric',
+        'fees_paid' => 'required|numeric|min:0|max:' . ($request->input('total_fees') - $request->input('fees_paid')),
+        'date' => 'required|date'
+    ], [
+        'roll_no.required' => 'Roll number is required.',
+        'roll_no.string' => 'Roll number must be a string.',
+        'roll_no.max' => 'Roll number must not exceed 50 characters.',
+        'roll_no.unique' => 'Roll number already exists.',
+        'name.required' => 'Name is required.',
+        'name.string' => 'Name must be a string.',
+        'name.max' => 'Name must not exceed 255 characters.',
+        'total_fees.required' => 'Total fees is required.',
+        'total_fees.numeric' => 'Total fees must be a number.',
+        'fees_paid.required' => 'Fees paid is required.',
+        'fees_paid.numeric' => 'Fees paid must be a number.',
+        'fees_paid.min' => 'Fees paid must be at least 0.',
+        'fees_paid.max' => 'Fees paid must not exceed the remaining fees.',
+        // 'date.required' => 'Date is required.',
+        // 'date.date' => 'Date must be a valid date.',
+        // 'date.before_or_equal' => 'Date must not be in the future.'
+    ]);
+
+    // Create a new student record using mass assignment
+    Student::create($validatedData);
+
+    return redirect()->route('students.index')->with('success', 'Student added successfully');
     }
 
     public function edit($id){
