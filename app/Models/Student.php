@@ -10,7 +10,7 @@ use Illuminate\Testing\Constraints\SoftDeletedInDatabase;
 class Student extends Model
 {
     use HasFactory;
-    use SoftDeletes;
+    // use SoftDeletes;
     protected $fillable = [
         'roll_no', 'name', 'total_fees', 'fees_paid', 'date','date1','date2'
     ];

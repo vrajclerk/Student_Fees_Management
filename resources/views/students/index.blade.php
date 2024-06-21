@@ -32,15 +32,36 @@
                     <path d="M1.5 1.5A.5.5 0 0 1 2 1h12a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.128.334L10 8.692V13.5a.5.5 0 0 1-.342.474l-3 1A.5.5 0 0 1 6 14.5V8.692L1.628 3.834A.5.5 0 0 1 1.5 3.5z"/>
                 </svg>
             </button>
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <a href="/" class="link">
+                Clear filters</a>
+                <style>
+                    .link{
+                        background-color: #218838;
+                        color: white;
+                        padding: 8px 20px;
+                        border-radius: 8px;
+                        cursor: pointer;
+                        text-align: center;
+                        text-decoration: none;
+                        display: inline-block;
+                        font-size: 16px;
+                        margin: 4px 2px;
+                        transition-duration: 0.4s;
+                        border: none;
+                    }
+                    </style>
         </form>
+        
     </div>
+    {{-- </div> --}}
     {{-- </div> --}}
 
     <div>
         <form action="{{ route('students.search') }}" method="POST" class="form-inline mb-3 float-right">
             @csrf
             <input type="text" name="query" class="form-control mr-3" size="22" placeholder="Search by Roll No or Name" required>
-            <button type="submit" class="btn btn-success">
+            <button type="submit" class="btn btn-success" style="border-radius: 18px;">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="white" class="bi bi-search" viewBox="0 0 16 16">
                     <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
                 </svg>
@@ -89,7 +110,7 @@
                     <th scope="col">Fees Paid</th>
                     <th scope="col" style="width:5%">Remaining Fees</th>
                     <th scope="col">Date</th>
-                    <th scope="col" style="width:25%">Actions</th>
+                    <th scope="col" style="width:20%">Actions</th>
                     <th scope="col" style="width:5%">Fees Status</th>
                 </tr>
             </thead>
@@ -114,7 +135,7 @@
                         <td>{{ old('date', \Carbon\Carbon::parse($student->date)->format('d-m-Y')) }}</td>
                         <td class="actions">
                             <a href="{{ route('students.edit', ['id' => $student->id]) }}">
-                                <button class="btn btn-light d-inline-block m-2">
+                                <button class="btn btn-light d-inline-block m-2" style="padding: 4px 2px;" title="edit student fees">
                                     <svg class="svg-icon" fill="none" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
                                         <g stroke="#a649da" stroke-linecap="round" stroke-width="2">
                                             <path d="M20 20H4"></path>
@@ -125,7 +146,7 @@
                             </a> 
                             | 
                             <a href="{{ route('students.force-delete', ['id' => $student->id]) }}">
-                                <button type="button" class="btn btn-danger d-inline-block m-2" onclick="return confirm('Are you sure you want to delete this record?');">
+                                <button type="button" style="padding: 4px 7px;" class="btn btn-danger d-inline-block m-2" onclick="return confirm('Are you sure you want to delete this record?');">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
                                         <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
                                         <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
@@ -134,7 +155,7 @@
                             </a> 
                             | 
                             <a href="{{ route('students.marks.index', $student->id) }}" class="custom-tooltip" data-toggle="tooltip" title="Add and view student marks">
-                                <button class="btn d-inline-block m-2" style="background-color:rgb(113, 202, 78)">Marks</button>
+                                <button class="btn d-inline-block m-2" style="background-color:rgb(113, 202, 78); padding: 4px 8px;">Marks</button>
                             </a>
                         </td>
                         <td style="font-weight: bold">

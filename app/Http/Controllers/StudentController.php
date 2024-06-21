@@ -29,8 +29,9 @@ class StudentController extends Controller
                     $query->where('remaining_fees', 0);
                     break;
                 case 'partially_paid':
-                    $query->whereColumn('remaining_fees', '>', 0)
-                          ->whereColumn('remaining_fees', '<', 'total_fees');
+                    // if($query->where('remaining_fees','<','total_fees')){
+                            $query->whereColumn('fees_paid', '<', 'total_fees')
+                                    ->whereColumn('remaining_fees', '<>', 'total_fees');
                     break;
                 case 'not_paid':
                     $query->whereColumn('remaining_fees', '=', 'total_fees');
