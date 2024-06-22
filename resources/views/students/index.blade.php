@@ -2,8 +2,13 @@
 
 @section('content')
 
-    <h2 class="font-monospace font-weight-bold" style="color:rgb(6, 138, 17)">Student Records</h2> 
+    <h2 class="font-monospace font-weight-bold" style="color:rgb(33, 136, 56)">Student Records</h2> 
     <div>
+    <a href="{{ route('boardmarks.index') }}">
+        <button class="link float-right" > Board Marks </button></a>
+    </div>
+    <div>
+        
         <form method="GET" action="{{ route('students.index') }}" class="float-center" id="filterform">
             <div class="form-group">
                 <select name="payment_status" id="payment_status" class="$form-select-feedback-icon-size:$input-height-inner-half $input-height-inner-half;">
@@ -51,6 +56,7 @@
                         border: none;
                     }
                     </style>
+                    
         </form>
         
     </div>
@@ -75,7 +81,8 @@
             <path d="M8.256 14a4.5 4.5 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10q.39 0 .74.025c.226-.341.496-.65.804-.918Q8.844 9.002 8 9c-5 0-6 3-6 4s1 1 1 1z"/>
         </svg> Student
     </a>
-
+    &nbsp;&nbsp;
+   
     @if (session('success'))
         <div id="successMessage" class="alert alert-success alert-dismissible fade show" role="alert">
             {{ session('success') }}
@@ -165,7 +172,7 @@
                                 $feesStatusColor = '';
 
                                 if ($remainingFees == 0) {
-                                    $feesStatusColor = 'green';
+                                    $feesStatusColor = '#218838';
                                 } elseif ($remainingFees == $totalFees) {
                                     $feesStatusColor = 'red';
                                 } else {

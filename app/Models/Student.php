@@ -44,5 +44,8 @@ class Student extends Model
 {
     return $this->hasMany(Mark::class);
 }
-
+public function boardMarks()
+{
+    return $this->hasMany(BoardMark::class);
+}
 }
