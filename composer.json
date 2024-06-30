@@ -52,7 +52,8 @@
         ],
         "post-create-project-cmd": [
             "@php artisan key:generate --ansi"
-        ]
+        ],
+        "build": "composer install --no-dev --optimize-autoloader && npm install && npm run prod && php artisan migrate --force && php artisan optimize && php artisan config:cache && php artisan route:cache && php artisan view:cache"
     },
     "extra": {
         "laravel": {

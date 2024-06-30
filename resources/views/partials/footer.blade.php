@@ -5,7 +5,7 @@
             <div class="col-lg-4 col-md-6 mb-4 mb-md-0">
                 <h5 class="text-uppercase"><b>About CEP</b></h5>
                 <p>
-                    Clerk's Education Point is dedicated to providing top-quality educational resources and services.
+                    Clerk's Education Point is dedicated to providing top-quality education.
                 </p>
             </div>
             <!-- Links Section -->
