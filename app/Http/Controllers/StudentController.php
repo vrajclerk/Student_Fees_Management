@@ -196,23 +196,23 @@ class StudentController extends Controller
         return response()->download($filename, $filename, $headers)->deleteFileAfterSend(true);
     }
     
-    // public function trash()
-    // {
-    //     $students = Student::onlyTrashed()->get();
-    //     return view('students.trash', compact('students'));
-    // }
+    public function trash()
+    {
+        $students = Student::withTrashed()->get();
+        return view('students.trash', compact('students'));
+    }
 
-    // public function restore($id)
-    // {
-    //     $student = Student::withTrashed()->findOrFail($id);
-    //     $student->restore();
-    //     return redirect()->route('students.trash')->with('success', 'Student restored successfully');
-    // }
+    public function restore($id)
+    {
+        $student = Student::withTrashed()->findOrFail($id);
+        $student->restore();
+        return redirect()->route('students.trash')->with('success', 'Student restored successfully');
+    }
 
-    // public function forceDelete($id)
-    // {
-    //     $student = Student::withTrashed()->findOrFail($id);
-    //     $student->forceDelete();
-    //     return redirect()->route('students.index')->with('success', 'Student permanently deleted');
-    // }
+    public function forceDelete($id)
+    {
+        $student = Student::withTrashed()->findOrFail($id);
+        $student->forceDelete();
+        return redirect()->route('students.index')->with('success', 'Student permanently deleted');
+    }
 }
