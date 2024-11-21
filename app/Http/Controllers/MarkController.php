@@ -30,13 +30,14 @@ class MarkController extends Controller
 
     public function store(Request $request, Student $student)
     {
+        // Validates the input data using rules for each fieldc
         $request->validate([
             'marks.*.subject' => 'required|string',
             'marks.*.monthly_marks' => 'nullable|integer',
             'marks.*.mid_term_marks' => 'nullable|integer',
             'marks.*.final_marks' => 'nullable|integer',
         ]);
-
+        // Iterates through the marks array in the request and creates a new Mark instance for each subject.
         foreach ($request->marks as $markData) {
             $mark = new Mark([
                 'subject' => $markData['subject'],
@@ -44,7 +45,7 @@ class MarkController extends Controller
                 'mid_term_marks' => $markData['mid_term_marks'],
                 'final_marks' => $markData['final_marks'],
             ]);
-            $student->marks()->save($mark);
+            $student->marks()->save($mark); //links marks to the student
         }
 
         return redirect()->route('students.marks.index', $student->id)->with('success', 'Marks added successfully.');
@@ -61,6 +62,7 @@ class MarkController extends Controller
 
     public function update(Request $request, Student $student)
 {
+    // Validates the input, ensuring each mark has an existing ID.
     $request->validate([
         'marks.*.id' => 'required|integer|exists:marks,id',
         'marks.*.monthly_marks' => 'nullable|integer',
@@ -69,6 +71,7 @@ class MarkController extends Controller
     ]);
 
     foreach ($request->marks as $markData) {
+        //retrieve a record from the database and automatically throws a "ModelNotFoundException" if the record is not found
         $markToUpdate = Mark::findOrFail($markData['id']);
         $markToUpdate->update([
             'monthly_marks' => $markData['monthly_marks'],

@@ -45,7 +45,7 @@ class StudentController extends Controller
         
         $students = $query->paginate(10);
         
-        // Get all classes for the filter dropdown
+        // Fetches unique class names for a dropdown filter
         $classes = Student::distinct()->pluck('class');
 
 

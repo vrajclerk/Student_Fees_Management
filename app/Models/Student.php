@@ -11,6 +11,8 @@ class Student extends Model
 {
     use HasFactory;
     // use SoftDeletes;
+
+    //array defines attributes that can be mass-assigned
     protected $fillable = [
         'roll_no', 'name', 'total_fees', 'fees_paid', 'date','date1','date2'
     ];
@@ -20,7 +22,7 @@ class Student extends Model
     {
         return $this->total_fees - $this->fees_paid;
     }
-
+    // defines payment status attribute
     public function getPaymentStatusAttribute()
     {
         if ($this->remaining_fees == 0) {
