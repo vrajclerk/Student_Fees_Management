@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddColumnDatoToStudentsTable extends Migration
+class AddRemainingFeesColumn extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,11 @@ class AddColumnDatoToStudentsTable extends Migration
      */
     public function up()
     {
-        // Removed duplicate 'date' column migration
+        Schema::table('students', function (Blueprint $table) {
+            if (!Schema::hasColumn('students', 'remaining_fees')) {
+                $table->decimal('remaining_fees', 10, 2)->after('fees_paid');
+            }
+        });
     }
 
     /**
@@ -24,7 +28,9 @@ class AddColumnDatoToStudentsTable extends Migration
     public function down()
     {
         Schema::table('students', function (Blueprint $table) {
-            $table->dropIfExists('date');
+            if (Schema::hasColumn('students', 'remaining_fees')) {
+                $table->dropColumn('remaining_fees');
+            }
         });
     }
-}
+} 

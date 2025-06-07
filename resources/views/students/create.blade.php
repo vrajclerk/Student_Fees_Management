@@ -2,69 +2,75 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container mt-5">
-    <div class="card">
-        <div class="card-header bg-info text-white">
-            <h2 class="mb-0">Add Student Record</h2>
-        </div >
-        <div id="error">
-        @if ($errors->any())
-    <div class="alert alert-danger">
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-        <button type="button" class="btn-close btn-primary  btn-float-end" data-bs-dismiss="alert" aria-label="Close">OK</button>
-
-    </div>
-@endif
-        </div>
+<div class="container py-4">
+    <h2 class="text-success mb-4">Add New Student</h2>
+    <div class="card shadow-sm">
         <div class="card-body">
-            
-            <form method="post" action="{{ route('students.store') }}">
+            <form action="{{ route('students.store') }}" method="POST">
                 @csrf
-                <div class="form-group mb-3">
-                    <label for="roll_no" class="form-label text-success font-weight-bold ">Roll Number :</label>
-                    <input type="text" class="form-control" id="roll_no" name="roll_no" required>
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label for="roll_no" class="form-label">Roll Number</label>
+                        <input type="text" class="form-control @error('roll_no') is-invalid @enderror" id="roll_no" name="roll_no" value="{{ old('roll_no') }}" required>
+                        @error('roll_no')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="col-md-6">
+                        <label for="name" class="form-label">Name</label>
+                        <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" value="{{ old('name') }}" required>
+                        @error('name')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="col-md-6">
+                        <label for="class" class="form-label">Class</label>
+                        <select class="form-select @error('class') is-invalid @enderror" id="class" name="class" required>
+                            <option value="">Select Class</option>
+                            @foreach($classes as $value => $label)
+                                <option value="{{ $value }}" {{ old('class') == $value ? 'selected' : '' }}>{{ $label }}</option>
+                            @endforeach
+                        </select>
+                        @error('class')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="col-md-6">
+                        <label for="total_fees" class="form-label">Total Fees</label>
+                        <input type="number" class="form-control @error('total_fees') is-invalid @enderror" id="total_fees" name="total_fees" value="{{ old('total_fees') }}" required>
+                        @error('total_fees')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="col-md-6">
+                        <label for="fees_paid" class="form-label">Fees Paid</label>
+                        <input type="number" class="form-control @error('fees_paid') is-invalid @enderror" id="fees_paid" name="fees_paid" value="{{ old('fees_paid') }}" required>
+                        @error('fees_paid')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="col-md-6">
+                        <label for="date" class="form-label">Date</label>
+                        <input type="date" class="form-control @error('date') is-invalid @enderror" id="date" name="date" value="{{ old('date', date('Y-m-d')) }}" required>
+                        @error('date')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
                 </div>
-                <div class="form-group mb-3">
-                    <label for="name" class="form-label text-success font-weight-bold">Name :</label>
-                    <input type="text" class="form-control" id="name" name="name" required>
-                </div>
-                <div class="form-group mb-3 row ">
-                    <label for="class" class="col-sm-1 col-form-label text-success font-weight-bold">Class:</label><br/>
-                    <div class="col-sm-10">
-                    <select name="class" id="class" class="form-select">
-                        <option value=""> <<<<< Select Class >>>>> </option>
-                        {{-- <option value="all">All</option> --}}
-                        <option value="11_Morning">11th (Morning)</option>
-                        <option value="11_Evening">11th (Evening)</option>
-                        <option value="12_Morning">12th (Morning)</option>
-                        <option value="12_Evening">12th (Evening)</option>
-                    </select>
-                </div>
-                </div>
-                <div class="form-group mb-3">
-                    <label for="total_fees" class="form-label text-success font-weight-bold">Total Fees :</label>
-                    <input type="number" class="form-control" id="total_fees" name="total_fees" step="500" required>
-                </div>
-                <div class="form-group mb-3">
-                    <label for="fees_paid" class="form-label text-success font-weight-bold">Fees Paid :</label>
-                    <input type="number" class="form-control" id="fees_paid" name="fees_paid" step="500" required>
-                </div>
-                <div class="form-group mb-3">
-                    <label for="date" class="form-label text-success font-weight-bold">Date :</label>
-                    <input type="date" class="form-control col-sm-3" id="date" name="date"  required>
-                </div>
-                <div class="form-group">
-                    <button type="submit" class="btn btn-info w-40 ">Add Student</button>
+                <div class="mt-4">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Save Student
+                    </button>
+                    <a href="{{ route('students.index') }}" class="btn btn-outline-secondary">
+                        <i class="fas fa-times"></i> Cancel
+                    </a>
                 </div>
             </form>
         </div>
     </div>
 </div>
 @endsection
+
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         setTimeout(function() {

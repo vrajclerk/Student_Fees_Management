@@ -1,5 +1,3 @@
-
-
 <?php
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\StudentController;
@@ -8,6 +6,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Auth\LoginController;
 use App\Mail\NewUserWelcomeMail;
 use App\Http\Controllers\BoardMarkController;
+use App\Http\Controllers\ProfileController;
 
 
 /*
@@ -22,6 +21,9 @@ use App\Http\Controllers\BoardMarkController;
 */
 
 Route::get('/', function () {
+    if (auth()->check()) {
+        return redirect()->route('students.index');
+    }
     return view('welcome');
 });
 Auth::routes();
@@ -124,3 +126,18 @@ Route::middleware('auth')->group(function () {
     Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
                 ->name('logout');
 });
+
+Route::middleware(['auth'])->group(function () {
+    // Student Routes
+    Route::resource('students', StudentController::class);
+    
+    // Board Marks Routes
+    Route::resource('boardmarks', BoardMarkController::class);
+    
+    // Profile Routes
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+require __DIR__.'/auth.php';

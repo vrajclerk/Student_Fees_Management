@@ -54,42 +54,57 @@ class StudentController extends Controller
 
     public function create()
     {
-        return view('students.create');
+        // Get unique class names for the dropdown
+        $classes = [
+            '11_Morning' => '11th (Morning)',
+            '11_Evening' => '11th (Evening)',
+            '12_Morning' => '12th (Morning)',
+            '12_Evening' => '12th (Evening)'
+        ];
+        return view('students.create', compact('classes'));
     }
     public function store(Request $request)
     {
-        
-    // Validate the request data with custom error messages
-    $validatedData = $request->validate([
-        'roll_no' => 'required|string|max:50|unique:students',
-        'name' => 'required|string|max:255',
-        'class' => 'required|string',
-        'total_fees' => 'required|numeric',
-        'fees_paid' => 'required|numeric|min:0|max:' . ($request->input('total_fees') - $request->input('fees_paid')),
-        'date' => 'required|date'
-    ], [
-        'roll_no.required' => 'Roll number is required.',
-        'roll_no.string' => 'Roll number must be a string.',
-        'roll_no.max' => 'Roll number must not exceed 50 characters.',
-        'roll_no.unique' => 'Roll number already exists.',
-        'name.required' => 'Name is required.',
-        'name.string' => 'Name must be a string.',
-        'name.max' => 'Name must not exceed 255 characters.',
-        'total_fees.required' => 'Total fees is required.',
-        'total_fees.numeric' => 'Total fees must be a number.',
-        'fees_paid.required' => 'Fees paid is required.',
-        'fees_paid.numeric' => 'Fees paid must be a number.',
-        'fees_paid.min' => 'Fees paid must be at least 0.',
-        'fees_paid.max' => 'Fees paid must not exceed the remaining fees.',
-        // 'date.required' => 'Date is required.',
-        // 'date.date' => 'Date must be a valid date.',
-        // 'date.before_or_equal' => 'Date must not be in the future.'
-    ]);
+        // Validate the request data with custom error messages
+        $validatedData = $request->validate([
+            'roll_no' => 'required|string|max:50|unique:students',
+            'name' => 'required|string|max:255',
+            'class' => 'required|string',
+            'total_fees' => 'required|numeric',
+            'fees_paid' => 'required|numeric|min:0|max:' . $request->input('total_fees'),
+            'date' => 'required|date'
+        ], [
+            'roll_no.required' => 'Roll number is required.',
+            'roll_no.string' => 'Roll number must be a string.',
+            'roll_no.max' => 'Roll number must not exceed 50 characters.',
+            'roll_no.unique' => 'Roll number already exists.',
+            'name.required' => 'Name is required.',
+            'name.string' => 'Name must be a string.',
+            'name.max' => 'Name must not exceed 255 characters.',
+            'class.required' => 'Class is required.',
+            'class.string' => 'Class must be a string.',
+            'total_fees.required' => 'Total fees is required.',
+            'total_fees.numeric' => 'Total fees must be a number.',
+            'fees_paid.required' => 'Fees paid is required.',
+            'fees_paid.numeric' => 'Fees paid must be a number.',
+            'fees_paid.min' => 'Fees paid must be at least 0.',
+            'fees_paid.max' => 'Fees paid must not exceed the total fees.',
+            'date.required' => 'Date is required.',
+            'date.date' => 'Date must be a valid date.'
+        ]);
 
-    // Create a new student record using mass assignment
-    Student::create($validatedData);
+        // Calculate remaining fees
+        $validatedData['remaining_fees'] = $validatedData['total_fees'] - $validatedData['fees_paid'];
 
-    return redirect()->route('students.index')->with('success', 'Student added successfully');
+        try {
+            // Create a new student record using mass assignment
+            Student::create($validatedData);
+            return redirect()->route('students.index')->with('success', 'Student added successfully');
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->withInput()
+                ->withErrors(['error' => 'Failed to create student record. Please try again.']);
+        }
     }
 
     public function edit($id){

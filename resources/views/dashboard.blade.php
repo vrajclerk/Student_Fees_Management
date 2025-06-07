@@ -1,17 +1,16 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Dashboard') }}
-        </h2>
-    </x-slot>
-
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 bg-white border-b border-gray-200">
-                    You're logged in!
+@extends('layouts.app')
+@section('content')
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">{{ __('Dashboard') }}</div>
+                <div class="card-body">
+                    <h5 class="card-title mb-3">Welcome!</h5>
+                    <p class="card-text">You're logged in!</p>
                 </div>
             </div>
         </div>
     </div>
-</x-app-layout>
+</div>
+@endsection

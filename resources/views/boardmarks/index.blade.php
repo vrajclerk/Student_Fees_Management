@@ -3,54 +3,94 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-    <h2>Board Marks</h2>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Roll No</th>
-                <th>Name</th>
-                <th>Account</th>
-                <th>Statistics</th>
-                <th>Total</th>
-                <th>Percentage</th>
-                <th>Grade</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach ($students as $student)
-                @foreach ($student->boardMarks as $boardMark)
+<div class="container py-4">
+    <h2 class="text-success mb-4">Board Marks</h2>
+    <div class="d-flex justify-content-between mb-3">
+        <a href="{{ route('students.index') }}" class="btn btn-outline-success">
+            <i class="fas fa-arrow-left"></i> Back to Students
+        </a>
+        <a href="{{ route('boardmarks.create') }}" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Add Board Marks
+        </a>
+    </div>
+
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-light">
+            <form method="GET" action="{{ route('boardmarks.index') }}" class="row g-3">
+                <div class="col-md-4">
+                    <select name="class" id="class" class="form-select">
+                        <option value="">Select Class</option>
+                        @foreach($classes as $class)
+                            <option value="{{ $class }}" {{ request('class') == $class ? 'selected' : '' }}>{{ $class }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-filter"></i> Filter
+                    </button>
+                    <a href="{{ route('boardmarks.index') }}" class="btn btn-outline-secondary">Clear Filters</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    @if (session('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+
+    @if($boardmarks->isEmpty())
+        <div class="alert alert-info">No board marks found.</div>
+    @else
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead class="table-dark">
                     <tr>
-                        <td>{{ $student->roll_no }}</td>
-                        <td>{{ $student->name }}</td>
-                        <td>{{ $boardMark->account }}</td>
-                        <td>{{ $boardMark->statistics }}</td>
-                        <td>{{ $boardMark->total }}</td>
-                        <td>{{ $boardMark->percentage }}</td>
-                        <td>{{ $boardMark->grade }}</td>
-                        <td>
-                            <a href="{{ route('boardmarks.edit', $boardMark->id) }}" class="btn "><svg class="svg-icon" fill="none" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
-                                <g stroke="#a649da" stroke-linecap="round" stroke-width="2">
-                                    <path d="M20 20H4"></path>
-                                    <path clip-rule="evenodd" d="M14.5858 4.41422c.781-.78105 2.0474-.78105 2.8284 0 .7811.78105.7811 2.04738 0 2.82843L8.82898 15.5269l-3.03046.202.20203-3.0304z" fill-rule="evenodd"></path>
-                                </g>
-                            </svg></a>
-                            <form action="{{ route('boardmarks.destroy', $boardMark->id) }}" method="POST" style="display:inline-block;">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-danger"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
-                                    <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
-                                    <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
-                                </svg>
-                                    </button>
-                            </form>
-                        </td>
+                        <th>Roll Number</th>
+                        <th>Name</th>
+                        <th>Class</th>
+                        <th>English</th>
+                        <th>Hindi</th>
+                        <th>Maths</th>
+                        <th>Science</th>
+                        <th>Social Science</th>
+                        <th>Total Marks</th>
+                        <th>Percentage</th>
+                        <th>Actions</th>
                     </tr>
-                @endforeach
-            @endforeach
-        </tbody>
-    </table>
-    <a href="{{ route('boardmarks.create') }}" class="btn btn-success">Add Board Marks</a>
+                </thead>
+                <tbody>
+                    @foreach ($boardmarks as $mark)
+                        <tr>
+                            <td>{{ $mark->roll_no }}</td>
+                            <td>{{ $mark->name }}</td>
+                            <td>{{ $mark->class }}</td>
+                            <td>{{ $mark->english }}</td>
+                            <td>{{ $mark->hindi }}</td>
+                            <td>{{ $mark->maths }}</td>
+                            <td>{{ $mark->science }}</td>
+                            <td>{{ $mark->social_science }}</td>
+                            <td>{{ $mark->total_marks }}</td>
+                            <td>{{ $mark->percentage }}%</td>
+                            <td>
+                                <a href="{{ route('boardmarks.edit', $mark->id) }}" class="btn btn-sm btn-outline-primary" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <a href="{{ route('boardmarks.delete', $mark->id) }}" class="btn btn-sm btn-outline-danger" title="Delete" onclick="return confirm('Are you sure you want to delete this record?');">
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+        <div class="d-flex justify-content-center mt-4">
+            {{ $boardmarks->onEachSide(3)->links() }}
+        </div>
+    @endif
 </div>
 @endsection

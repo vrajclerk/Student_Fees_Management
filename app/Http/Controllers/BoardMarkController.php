@@ -12,7 +12,9 @@ class BoardMarkController extends Controller
     public function index()
     {
         $students = Student::with('boardMarks')->get();
-        return view('boardmarks.index', compact('students'));
+        $classes = Student::distinct()->pluck('class')->toArray();
+        $boardmarks = BoardMark::with('student')->get();
+        return view('boardmarks.index', compact('students', 'classes', 'boardmarks'));
     }
 
     public function create()
